@@ -3,7 +3,7 @@
 - spatial search [wiki][3] old wiki
 - [function query][4] old wiki
 - [Custom Score1][5][custom Score2][6]
-
+- [Solr china][7]
 
 
 
@@ -18,3 +18,8 @@
 [4]: http://wiki.apache.org/solr/FunctionQuery
 [5]: http://opensourceconnections.com/blog/2014/03/12/using-customscorequery-for-custom-solrlucene-scoring/
 [6]: http://opensourceconnections.com/blog/2014/01/20/build-your-own-custom-lucene-query-and-scorer/
+[7]: http://www.solr.cc
+
+
+
+

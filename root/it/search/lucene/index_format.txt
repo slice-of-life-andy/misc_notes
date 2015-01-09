@@ -1,0 +1,2 @@
+http://lucene.apache.org/core/4_8_0/core/org/apache/lucene/index/SegmentInfos.html
+http://lucene.apache.org/core/4_8_0/core/org/apache/lucene/codecs/lucene46/Lucene46SegmentInfoFormat.html

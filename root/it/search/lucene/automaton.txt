@@ -1,0 +1,5 @@
+official apis about Automaton
+
+http://lucene.apache.org/core/4_0_0/core/org/apache/lucene/util/automaton/Automaton.html#minimize
+
+
