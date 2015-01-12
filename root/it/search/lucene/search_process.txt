@@ -1,0 +1,2 @@
+createDistributedIdf(rb) method no impl
+分布式idf没有实现
