@@ -1,0 +1,21 @@
+set @x:=0;
+select a.id,V.user_id,V.province
+from accounts a left join (
+select s.user_id,s.province,
+@num := if(@x = s.user_id, @num + 1, 1) as row_number,
+@x:=s.user_id as dummy
+from statuses s
+order by s.user_id,s.updated_at desc
+) V on a.id =V.user_id and V.row_number = 1 where a.id in (59173801,31477123);
+
+
+set @x:=0;
+insert into tianji_kpi.statuses(user_id,created_at,updated_at,province,city)
+select V.user_id,V.created_at,V.updated_at,V.province,V.city
+from (
+select s.user_id,s.created_at,s.updated_at,s.province,s.city,
+@num := if(@x = s.user_id, @num + 1, 1) as row_number,
+@x:=s.user_id as dummy
+from statuses s
+order by s.user_id,s.updated_at desc
+) V where V.row_number = 1 ;
