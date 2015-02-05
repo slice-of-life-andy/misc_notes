@@ -4,9 +4,9 @@
 - [function query][4] old wiki
 - [Custom Score1][5][custom Score2][6]
 - [Solr china][7]
-
-
-
+- [Custom Score][8]
+- [3 Ways to Customize Solr 4][9]
+- [create-custom-solr-queryparser][10]
 
 
 
@@ -19,7 +19,7 @@
 [5]: http://opensourceconnections.com/blog/2014/03/12/using-customscorequery-for-custom-solrlucene-scoring/
 [6]: http://opensourceconnections.com/blog/2014/01/20/build-your-own-custom-lucene-query-and-scorer/
 [7]: http://www.solr.cc
-
-
-
+[8]: http://spykem.blogspot.com/2013/06/plug-in-external-score-to-solr.html
+[9]: http://glennengstrand.info/blog/?p=233
+[10]: http://java.dzone.com/articles/create-custom-solr-queryparser
 
