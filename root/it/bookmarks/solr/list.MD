@@ -7,8 +7,8 @@
 - [Custom Score][8]
 - [3 Ways to Customize Solr 4][9]
 - [create-custom-solr-queryparser][10]
-
-
+- [solrtutorial][11]
+- [function-queries][12]
 
 
 
@@ -22,4 +22,5 @@
 [8]: http://spykem.blogspot.com/2013/06/plug-in-external-score-to-solr.html
 [9]: http://glennengstrand.info/blog/?p=233
 [10]: http://java.dzone.com/articles/create-custom-solr-queryparser
-
+[11]: http://www.solrtutorial.com
+[12]: http://lucidworks.com/blog/solr-relevancy-function-queries/
