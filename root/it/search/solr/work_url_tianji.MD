@@ -19,3 +19,8 @@ curl -i -H "Accept: application/json" -H "Content-Type: application/json" 'http:
 
 boost
 http://solr/solr/collection_job2/select?q=is_visible%3Atrue+AND+is_stopped%3Afalse+AND+is_expired%3Afalse+AND+confirm_status%3Ac&start=0&rows=2000&sort=createDay%20desc,score%20desc&fl=id,createDay,province&defType=edismax&bf=if%28exists%28query%28{!v=%27province:12%27}%29%29,100,0%29
+
+
+
+
+http://solr/solr/collection_user/select?q=*:*&&uid=18917057&fq={!frange%20l=1%20u=3}followervsp%28userID%29&fl=userID
