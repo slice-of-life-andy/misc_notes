@@ -8,7 +8,7 @@
 - [amplab][8]
 - [阳志平][9]
 - [Lifeba][10]
-
+- [interview a person two years][11]
 
 
 
@@ -22,3 +22,4 @@
 [8]: https://amplab.cs.berkeley.edu/software/
 [9]: http://www.yangzhiping.com/
 [10]: http://www.lifeba.org
+[11]: http://mindhacks.cn/2011/11/04/how-to-interview-a-person-for-two-years/
