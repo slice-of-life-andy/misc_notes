@@ -77,8 +77,8 @@ HttpSession session = ((ServletWebRequest)RequestCycle.get()
  invalidate(),invalidateNow()
 
  - Storing arbitrary objects with metadata
-   - RequestCycle, Session, Application and Component
-   - MetaDataKey
+    - RequestCycle, Session, Application and Component
+    - MetaDataKey
 
 
 
