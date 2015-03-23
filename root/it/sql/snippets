@@ -19,3 +19,195 @@ select s.user_id,s.created_at,s.updated_at,s.province,s.city,
 from statuses s
 order by s.user_id,s.updated_at desc
 ) V where V.row_number = 1 ;
+
+
+
+userIndex
+
+    select u.id as u_id, u.name_native_display, u.current_province, substr(u.current_city,1,20) as current_city,
+         u.current_country, u.headline, u.introduction, u.specialties, u.summary, u.gender, u.job_years, u.position_level,
+         u.industry as user_industry, lower(u.email) as email,u.mobile as mobile,u.account_type as account_type, t.type as channel,
+         b.id as b_id, b.name, b.position, b.current, b.b_type as type, b.detail, substr( b.locale,1,5) as locale, b.degree,b.end_date,
+         s.profile_score as score, b.industry, b.function_code, sko.name as skill_name, sko.level as skill_level,sko.skill_id as skill_id,
+         score.total_score,score.total_star,case when albums.album_photos_count > 0 then 1 else 0 end hasPhoto,albums.album_photos_count as album_photos_count,
+         status.current_country as status_country,status.current_province as status_province,status.current_city as status_city,
+         logs.updated_at as last_login_time,logs.latitude as latitude,logs.longitude as longitude,stars.follower_count,users.normal_logo as avatar,login.create_time as loginTime,
+         if(hhy.user_id is null,0,1) as hhy
+       from tianji.accounts as u
+         left join tianji_kpi.libin_s_t_user as t on t.user_id = u.id
+         left join tianji_kpi.member as s on s.member_id = u.id
+         left join tianji.backgrounds as b on u.id = b.account_id
+         left join tianji_kpi.libin_skill as sko on u.id = sko.user_id
+         left join tianji.hr_scores as score on u.id = score.id
+         left join tianji.albums as albums on u.id = albums.user_id
+         left join tianji_kpi.statuses as status on u.id = status.user_id
+         left join tianji.users as users on u.id = users.id
+         left join tianji_kpi.login_address as login on u.id = login.user_id
+         left join tianji.zhiyue_logs as logs on logs.id = (select zl.id from tianji.zhiyue_logs as zl where zl.user_id = u.id and zl.latitude is not null and zl.longitude is not null order by updated_at desc limit 1)
+         left join (select to_user_id, count(from_user_id) as follower_count from tianji.stars  group by to_user_id) stars on u.id = stars.to_user_id
+         left join tianji.hhy_logged_ins as hhy on u.id = hhy.user_id
+
+
+
+
+partial update select u.id as u_id, u.mobile as mobile,u.account_type as account_type,
+         score.total_score,score.total_star,case when albums.album_photos_count > 0 then 1 else 0 end hasPhoto,albums.album_photos_count as album_photos_count,
+         status.current_country as status_country,status.current_province as status_province,status.current_city as status_city,
+         logs.updated_at as last_login_time,logs.latitude as latitude,logs.longitude as longitude,stars.follower_count,users.normal_logo as avatar,login.create_time as loginTime,
+         if(hhy.user_id is null,0,1) as hhy
+       from tianji.accounts as u
+         left join tianji.hr_scores as score on u.id = score.id
+         left join tianji.albums as albums on u.id = albums.user_id
+         left join (select user_id,current_country,current_province,current_city from tianji.statuses where user_id = #userId# order by updated_at limit 1) status on u.id = status.user_id
+         left join tianji.users as users on u.id = users.id
+         left join (select user_id,create_time from login_address where user_id = #userId# order by create_time desc limit 1) login on u.id = login.user_id
+         left join tianji.zhiyue_logs as logs on logs.id = (select zl.id from tianji.zhiyue_logs as zl where zl.user_id = u.id and zl.latitude is not null and zl.longitude is not null order by updated_at desc limit 1)
+         left join (select to_user_id, count(from_user_id) as follower_count from tianji.stars where to_user_id = #userId#) stars on u.id = stars.to_user_id
+         left join tianji.hhy_logged_ins as hhy on u.id = hhy.user_id
+       where u.status='Y' and u.id = #userId#;
+
+
+
+update index version2
+
+on QA tianji_kpi:
+
+ 
+
+---libin_starts_tmp,libin_zhiyue_logs_tmp临时表创建---
+
+ 
+
+set SQL_LOG_BIN = 0;
+
+ 
+
+create table libin_starts_tmp as
+
+select to_user_id, count(from_user_id) as follower_count
+
+from tianji.stars 
+
+group by to_user_id;
+
+ 
+
+create index libin_starts_tmp_idx on libin_starts_tmp(to_user_id);
+
+ 
+
+create table libin_zhiyue_logs_tmp as
+
+select zl.user_id, cast(SUBSTRING_INDEX(group_concat(zl.id order by updated_at desc SEPARATOR ','),',', 1) as UNSIGNED) as id
+
+from tianji.zhiyue_logs as zl
+
+where zl.latitude is not null and zl.longitude is not null
+
+group by zl.user_id;
+
+ 
+
+create index libin_zhiyue_logs_tmp_idx on libin_zhiyue_logs_tmp(user_id);
+
+ 
+
+ 
+
+---临时表结构---
+
+ 
+
+/*
+
+ 
+
+CREATE TABLE `libin_starts_tmp` (
+
+  `to_user_id` int(11) DEFAULT NULL,
+
+  `follower_count` bigint(21) NOT NULL DEFAULT '0',
+
+  KEY `libin_starts_tmp_idx` (`to_user_id`)
+
+)
+
+ 
+
+ 
+
+ 
+
+CREATE TABLE `libin_zhiyue_logs_tmp` (
+
+  `user_id` int(11) DEFAULT NULL,
+
+  `id` bigint(21) unsigned DEFAULT NULL,
+
+  KEY `libin_zhiyue_logs_tmp_idx` (`user_id`)
+
+)
+
+ 
+
+*/
+
+ 
+
+----原SQL改成下面这样---
+
+ 
+
+ 
+
+ 
+
+ 
+
+select u.id as u_id, u.name_native_display, u.current_province, substr(u.current_city,1,20) as current_city,         
+
+u.current_country, u.headline, u.introduction, u.specialties, u.summary, u.gender, u.job_years, u.position_level,         
+
+u.industry as user_industry, lower(u.email) as email,u.mobile as mobile,u.account_type as account_type, t.type as channel,         
+
+b.id as b_id, b.name, b.position, b.current, b.b_type as type, b.detail, substr( b.locale,1,5) as locale, b.degree,b.end_date,         
+
+s.profile_score as score, b.industry, b.function_code, sko.name as skill_name, sko.level as skill_level,sko.skill_id as skill_id,         
+
+score.total_score,score.total_star,case when albums.album_photos_count > 0 then 1 else 0 end hasPhoto,albums.album_photos_count as album_photos_count,         
+
+status.current_country as status_country,status.current_province as status_province,status.current_city as status_city,         
+
+logs.updated_at as last_login_time,logs.latitude as latitude,logs.longitude as longitude,stars.follower_count,users.normal_logo as avatar,login.create_time as loginTime,         
+
+if(hhy.user_id is null,0,1) as hhy       
+
+from tianji.accounts as u         
+
+left join tianji_kpi.libin_s_t_user as t on t.user_id = u.id         
+
+left join tianji_kpi.member as s on s.member_id = u.id         
+
+left join tianji.backgrounds as b on u.id = b.account_id          
+
+left join tianji_kpi.libin_skill as sko on u.id = sko.user_id         
+
+left join tianji.hr_scores as score on u.id = score.id         
+
+left join tianji.albums as albums on u.id = albums.user_id         
+
+left join tianji_kpi.statuses as status on u.id = status.user_id         
+
+left join tianji.users as users on u.id = users.id         
+
+left join tianji_kpi.login_address as login on u.id = login.user_id
+
+left join tianji_kpi.libin_zhiyue_logs_tmp l_z_t on l_z_t.user_id =u.id     
+
+left join tianji.zhiyue_logs as logs on logs.id = l_z_t.id
+
+left join tianji_kpi.libin_starts_tmp stars on u.id = stars.to_user_id         
+
+left join tianji.hhy_logged_ins as hhy on u.id = hhy.user_id      
+
+ where u.status='Y' and u.id between 1 and 500;
