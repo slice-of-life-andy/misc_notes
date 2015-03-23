@@ -1,52 +1,52 @@
 **Under the hood of the request processing**
 
 1. Class Application and request processing
-Beside configuring and initializing our application, the Application class is responsible for creating the internal entities used by Wicket to process a request. These entities are instances of the following classes: RequestCycle, Request, Response and Session.
+ Beside configuring and initializing our application, the Application class is responsible for creating the internal entities used by Wicket to process a request. These entities are instances of the following classes: RequestCycle, Request, Response and Session.
 
 2. Request and Response classes
-The Request and Response classes are located in package org.apache.wicket.request and they provide an abstraction of the concrete request and response used by our web application.
+ The Request and Response classes are located in package org.apache.wicket.request and they provide an abstraction of the concrete request and response used by our web application.
 
-Both classes are declared as abstract but if our application class inherits from WebApplication it will use their sub classes ServletWebRequest and ServletWebResponse, both of them located inside the package org.apache.wicket.protocol.http.servlet.ServletWebRequest and ServletWebResponse wrap respectively a HttpServletRequest and a HttpServletResponse object. If we need to access to these low-level objects we can call Request's method getContainerRequest() and Response's method getContainerResponse()
+ Both classes are declared as abstract but if our application class inherits from WebApplication it will use their sub classes ServletWebRequest and ServletWebResponse, both of them located inside the package org.apache.wicket.protocol.http.servlet.ServletWebRequest and ServletWebResponse wrap respectively a HttpServletRequest and a HttpServletResponse object. If we need to access to these low-level objects we can call Request's method getContainerRequest() and Response's method getContainerResponse()
 
 3. The “director” of request processing - RequestCycle
-Class org.apache.wicket.request.cycle.RequestCycle is the entity in charge of serving a web request. Our application class creates a new RequestCycle on every request with its method createRequestCycle(request, response).
+ Class org.apache.wicket.request.cycle.RequestCycle is the entity in charge of serving a web request. Our application class creates a new RequestCycle on every request with its method createRequestCycle(request, response).
 
-自定义RequestCycle需要实现IRequestCycleProvider接口，并通过Application.setRequestCycleProvider进行设置
+ 自定义RequestCycle需要实现IRequestCycleProvider接口，并通过Application.setRequestCycleProvider进行设置
 
->get current Application,Session,RequestCycle 
-RequestCycle.get()
+ >get current Application,Session,RequestCycle 
+ RequestCycle.get()
 
-- RequestCycle and request processing
+ - RequestCycle and request processing
 
-In order to process a request, RequestCycle delegates the task to another entity which implements interface org.apache.wicket.request.IRequestHandler. There are different implementations of this interface, each suited for a particular type of requested resource (a page to render, an AJAX request, an URL to an external page, etc.).
+ In order to process a request, RequestCycle delegates the task to another entity which implements interface org.apache.wicket.request.IRequestHandler. There are different implementations of this interface, each suited for a particular type of requested resource (a page to render, an AJAX request, an URL to an external page, etc.).
 
-To resolve the right handler for a given HTTP request, the RequestCycle uses a set of objects implementing the org.apache.wicket.request.IRequestMapper interface. The mapping interface defines the getCompatibilityScore(Request request) method which returns a score indicating how compatible the request mapper is for the current request. RequestCycle will choose the mapper with the highest score and it will call its mapRequest(Request request) method to get the proper handler for the given request. Once RequestCycle has resolved a request handler, it invokes its method respond(IRequestCycle requestCycle) to start request processing.
+ To resolve the right handler for a given HTTP request, the RequestCycle uses a set of objects implementing the org.apache.wicket.request.IRequestMapper interface. The mapping interface defines the getCompatibilityScore(Request request) method which returns a score indicating how compatible the request mapper is for the current request. RequestCycle will choose the mapper with the highest score and it will call its mapRequest(Request request) method to get the proper handler for the given request. Once RequestCycle has resolved a request handler, it invokes its method respond(IRequestCycle requestCycle) to start request processing.
 
-Developers can create additional implementations of IRequestMapper and add them to their application via the mount(IRequestMapper mapper) method of the WebApplication class. In paragraph 10.6 we will see how Wicket uses this method to add built-in mappers for mounted pages.
+ Developers can create additional implementations of IRequestMapper and add them to their application via the mount(IRequestMapper mapper) method of the WebApplication class. In paragraph 10.6 we will see how Wicket uses this method to add built-in mappers for mounted pages.
 
-- Generating URL with the urlFor and mapUrlFor methods
+ - Generating URL with the urlFor and mapUrlFor methods
 
-The RequestCycle is also responsible for generating the URL value 
+ The RequestCycle is also responsible for generating the URL value 
 
-- Method setResponsePage
-The RequestCycle class contains the implementation of the setResponsePage method we use to redirect a user to a specific page
+ - Method setResponsePage
+ The RequestCycle class contains the implementation of the setResponsePage method we use to redirect a user to a specific page
 
-- RequestCycle's hook methods and listeners
+ - RequestCycle's hook methods and listeners
 
-requestCycle comes with some hook methods which can be overridden to perform custom actions when request handling reaches a specific stage. These methods are:onBeginRequest();onEndRequest();onDetach()
+ requestCycle comes with some hook methods which can be overridden to perform custom actions when request handling reaches a specific stage. These methods are:onBeginRequest();onEndRequest();onDetach()
 A more flexible way to interact with the request processing is to use the listener interface org.apache.wicket.request.cycle.IRequestCycleListener.
 
-To use the request cycle listeners we must add them to our application which in turn will pass them to the new RequestCycle's instances 
+ To use the request cycle listeners we must add them to our application which in turn will pass them to the new RequestCycle's instances 
 
+4. Session Class
 
-3. Session Class
-In Wicket we use class org.apache.wicket.Session to handle session-relative informations such as client informations, session attributes, session-level cache
-the new Session's instances are generated by the Application class with the newSession method
+ In Wicket we use class org.apache.wicket.Session to handle session-relative informations such as client informations, session attributes, session-level cache
+ the new Session's instances are generated by the Application class with the newSession method
 
-- Session and listeners
-session listeners must implements ISessionListener,add it into the application 
-add code in the Application
-```java
+ - Session and listeners
+ session listeners must implements ISessionListener,add it into the application 
+ add code in the Application
+ ```java
 @Override
 public void init(){
 	super.init();
@@ -59,30 +59,31 @@ public void init(){
 }
 ```
 
-- Handling session attributes
+ - Handling session attributes
 
-setAttribute(),getAttribute(),removeAttribute()
+ setAttribute(),getAttribute(),removeAttribute()
 
-- Accessing to the HTTP session
-```java
+ - Accessing to the HTTP session
+ ```java
 HttpSession session = ((ServletWebRequest)RequestCycle.get()
 		.getRequest()).getContainerRequest().getSession();
 ```
 
-- Temporary and permanent sessions
-Session.get().isTemporary();
-Session.get().bind();
+ - Temporary and permanent sessions
+ Session.get().isTemporary();
+ Session.get().bind();
 
-- Discarding session data
-invalidate(),invalidateNow()
+ - Discarding session data
+ invalidate(),invalidateNow()
 
-- Storing arbitrary objects with metadata
-RequestCycle, Session, Application and Component.
-MetaDataKey
+ - Storing arbitrary objects with metadata
+ RequestCycle, Session, Application and Component.
+ MetaDataKey
 
 
 
 5. Exception handling
+
 ```java
 getApplicationSettings().setInternalErrorPage(MyInternalErrorPage.class);
 ```
