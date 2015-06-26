@@ -1,0 +1,19 @@
+hide and dynamic unhide components
+
+
+
+Label label = new Label("createRepoLabel", "create a new a");
+		label.setOutputMarkupId(true);
+		final TextField<String> textField = new TextField<String>("newRepoName");
+		textField.setVisible(false);
+		textField.setOutputMarkupPlaceholderTag(true);
+		label.add(new AjaxEventBehavior("click") {
+			
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				textField.setVisible(true);
+				target.add(textField);
+			}
+		});
+		add(label);
+		add(textField.setOutputMarkupId(true));

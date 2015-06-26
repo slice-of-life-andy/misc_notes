@@ -1,0 +1,29 @@
+// load properties from bundle
+private static void loadMediaType() {
+         BundleContext bundleContext = GitServiceUtil.getBundleContext();
+         InputStream inputStream = null;
+         try {
+             inputStream = bundleContext.getBundle().getEntry(mediaFile).openStream();
+         } catch (IOException e1) {
+             // TODO Auto-generated catch block
+             e1.printStackTrace();
+         }
+         if (null != inputStream) {
+             System.out.println( "load media type");
+             try {
+                 Properties properties = new Properties();
+                 properties.load(inputStream);
+                 mediaTypeMap.putAll((Map)properties);
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+
+         } else {
+             System.out.println(" not found the media type");
+         }
+
+         Map<String, String> map = Constants.getMediaType();
+         for (Entry<String, String> entry : map.entrySet()) {
+             System.out.println(entry.getKey() + "=" + entry.getValue());
+         }
+    }
