@@ -10,3 +10,7 @@
 
 - [Introduction to Linear Algebra](http://genes.mit.edu/burgelab/yarden/strang_linear_algebra.pdf)
 - [Linear Algebra and Its' Applications](http://math.bnu.edu.cn/~lijiequan/publications/Strang_Linear.Algebra.and.Its.Applications.4ed.pdf)
+
+> Algorithm
+
+- Algorithm design
