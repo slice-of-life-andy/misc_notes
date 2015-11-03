@@ -17,3 +17,13 @@ Label label = new Label("createRepoLabel", "create a new a");
 		});
 		add(label);
 		add(textField.setOutputMarkupId(true));
+
+
+
+
+IPackageResourceGuard packageResourceGuard = getResourceSettings().getPackageResourceGuard();
+        if (packageResourceGuard instanceof SecurePackageResourceGuard)
+        {
+                SecurePackageResourceGuard guard = (SecurePackageResourceGuard)packageResourceGuard;
+                guard.addPattern("+*.mp4");
+        }

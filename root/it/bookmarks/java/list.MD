@@ -11,3 +11,7 @@
 [5]: https://docs.oracle.com/javase/8/javase-books.htm
 [6]: http://www.java2s.com/Code/Java/Development-Class/ByteCodeInstrumentationBCI.htm
 
+
+http://wicketguide.comsysto.com/
+
+http://njbartlett.name/2010/08/30/osgi-readiness-loading-classes.html

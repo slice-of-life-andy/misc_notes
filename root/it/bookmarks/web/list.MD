@@ -16,3 +16,16 @@ http://www.tutorialspoint.com/html5/html5_syntax.htm
 http://deeppai.com/2014/01/26/getting-started-with-webrtc/
 http://www.brynosaurus.com/pub/net/p2pnat/
 https://jitsi.org
+https://webrtchacks.com/hangout-analysis-philipp-hancke/
+http://segmentfault.com/a/1190000000436544
+https://code.google.com/p/chromium/codesearch#chromium/src/chrome/common/extensions/docs/examples/api/desktopCapture/&q=desktopcapture&sq=package:chromium
+https://developer.chrome.com/extensions/samples#search:desktopcapture
+http://hancke.name/webrtc/screenshare/#/
+
+video
+http://viralpatel.net/blogs/html5-server-sent-events-java-servlets-example/
+
+
+https://github.com/vbence/stream-m
+http://flazr.com/
+https://code.google.com/p/jwebsocket/

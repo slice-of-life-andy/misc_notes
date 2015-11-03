@@ -24,3 +24,6 @@
 [10]: http://java.dzone.com/articles/create-custom-solr-queryparser
 [11]: http://www.solrtutorial.com
 [12]: http://lucidworks.com/blog/solr-relevancy-function-queries/
+
+
+https://www.digitalocean.com/community/tutorials/how-to-install-solr-5-2-1-on-ubuntu-14-04

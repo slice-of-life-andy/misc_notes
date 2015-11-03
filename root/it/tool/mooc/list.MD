@@ -1,0 +1,5 @@
+Annotate over your desktop tool
+on-screen annotation software
+interactive whiteboard
+
+https://technifyme.wordpress.com/2013/02/18/create-mooc/
