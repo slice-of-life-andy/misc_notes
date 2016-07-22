@@ -1,0 +1,21 @@
+-- 编程工具
+
+. JetBrains
+  .. IDEA
+	----
+	http://www.ideajava.org/[IDEA开源社区]
+
+	http://idea.lanyus.com/[IDEA注册码]	
+	---- 
+
+-- 思维导图(mindmap)
+
+. xmind
+. freemind
+
+-- 读书软件
+
+. kindle
+. Calibre 
+. iReader
+. iBooks
