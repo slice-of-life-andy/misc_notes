@@ -14,3 +14,11 @@
 > Algorithm
 
 - Algorithm design
+
+
+
+== 编译器
+
+　编译器领域相关有三本公认的经典书籍，龙书《Compilers: Principles, Techniques, and Tools 》，虎书《Modern Compiler Implementation in X (X表示各种语言)》，鲸书《Advanced Compiler Design and Implementation》。其中龙书是编译理论方面公认的不二之选，而后面两本则对实践更有指导意义。另外@装配脑袋有个很好的编译器入门系列博客：http://www.cnblogs.com/Ninputer/archive/2011/06/07/2074632.html
+
+
