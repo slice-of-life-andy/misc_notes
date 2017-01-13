@@ -1,0 +1,83 @@
+imagemagick
+
+install from source
+
+/configure CPPFLAGS=-I/usr/local/include LDFLAGS='-L/usr/local/lib'
+ranlib /usr/local/lib/libjpeg.a
+ranlib /usr/local/lib/libjpeg.a
+ldconfig /usr/local/lib
+
+The Independent JPEG Group : http://www.ijg.org/
+The LibPNG Reference Library : http://libpng.sourceforge.net/
+
+
+Posted by mikebrooks on December 19, 2010 at 5:45pm
+The other day I got ImageMagick to work in my Drupal environment, but only after hours of trial and error.
+
+I thought I would share my experience in order to help others who might face similar problems.
+
+I am running Drupal 6.19 on a UNIX (FreeBSD 8.1) VPS with root access via SSH. My PHP Version is 5.3.2.
+
+My reasons for using ImageMagick:
+
+1. I want to use the Image Gallery module for a JPEG photo album.
+
+2. I cannot enable the module ImageAPI GD2 because "PHP GD was not compiled with jpeg support. (Currently using GD Jpeg Support Not installed)”. I was not comfortable with recompiling PHP, so I thought I'd try ImageMagick instead.
+
+My Steps
+
+1) Downloaded the ImageMagick tarball (version 6.6.6-5) from ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz and extracted it to /root/ImageMagick-6.6.6-5.
+
+2) Followed the install steps in http://imagemagick.org/script/install-source.php#unix, i.e.:
+
+
+$ cd ImageMagick-6.6.6-5
+$ ./configure
+$ make
+$ make install
+$ /usr/local/bin/convert logo: logo.gif
+$ make check
+
+I proceeded through all the install steps successfully, but when I went back to Drupal, I found that the ImageMagick convert process did not work for either JPG or PNG files.
+
+When I tried to run convert from the command line, e.g., $ convert test.jpg -flip test.jpg, the following error message was returned:
+
+convert: no decode delegate for this image format `test.jpg' @ error/constitute.c/ReadImage/532.
+
+This is when I discovered that I needed to have JPEG (and PNG) delegate libraries in place, BEFORE running ./configure.
+
+Had I read the Install-unix.txt file first I would have known this.
+
+The libraries are available from a few sources, but the best are:
+
+The Independent JPEG Group : http://www.ijg.org/
+The LibPNG Reference Library : http://libpng.sourceforge.net/
+3) So next step was to install the Delegates
+
+I downloaded and extracted the jpegsrc.v8b.tar.gz and libpng-1.4.5.tar.gz tarballs to /usr/local/src. I then closely followed their respective install instructions (install.txt).
+
+4) Next I reinstalled ImageMagick, but this time I followed the advanced instructions at:
+
+http://imagemagick.org/script/advanced-unix-installation.php
+
+Before installing I ran:
+
+$ make uninstall
+$ make clean
+
+After some trial and error, I found that I needed to tell the configure script EXACTLY where to find the delegate libraries and headers. All this is documented, albeit generically, in the advanced ImageMagick instructions.
+
+In the end, my configure script looked like this:
+
+$ ./configure CPPFLAGS=-I/usr/local/include LDFLAGS='-L/usr/local/lib -R/usr/local/lib' --enable-shared --disable-static --without-perl --with-png --with-tiff --with-jpeg
+
+The parameters the I believe were essential to success were:
+
+CPPFLAGS=-I/usr/local/include
+LDFLAGS='-L/usr/local/lib -R/usr/local/lib'
+- Mike Brooks
+www.snp.com
+
+P.S. Another helpful reference in my travels is Randy Cullom's blog post "Installing ImageMagick with JPEG, TIFF and PNG Support" at
+
+http://www.randycullom.com/chatterbox/archives/2006/12/installing_imag.html
