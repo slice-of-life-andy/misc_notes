@@ -1,0 +1,91 @@
+= select package class diagram 
+
+[plantuml,"select","png"]
+----
+package org.jsoup.select <<Frame>> {
+
+/'
+ class defination
+'/
+
+interface NodeVisitor
+class NodeTraversor
+class Selector 
+class Collector 
+abstract class Evaluator 
+abstract class CombiningEvaluator
+abstract class StructuralEvaluator 
+
+class Accumulator 
+class Elements
+class QueryParser
+}
+
+package org.jsoup.nodes <<Frame>> {
+
+class Element
+
+}
+
+class ArrayList<<Element>>
+
+'add class fields and methods'
+
+NodeVisitor : head(Node node, int depth)
+NodeVisitor : tail(Node node, int depth)
+ 
+NodeTraversor : NodeVisitor visitor 
+NodeTraversor : traverse(Node root)
+
+Selector : select()
+
+Collector : collect()
+
+Evaluator : matches()
+
+StructuralEvaluator : Evaluator evaluator 
+
+CombiningEvaluator : ArrayList<Evaluator> evaluators
+
+QueryParser : parse()
+
+Accumulator : Element root
+Accumulator : Elements elements
+Accumulator : Evaluator eval
+
+
+
+'relationship'
+
+Selector o-- Evaluator
+Selector o-- Element
+Selector ..> Collector
+Selector ..> QueryParser
+
+Collector +-- Accumulator
+Collector ..> NodeTraversor 
+Collector ..> Evaluator 
+Collector ..> Element 
+
+Evaluator <|-- CombiningEvaluator
+Evaluator <|-- StructuralEvaluator
+
+
+NodeVisitor <|.. Accumulator 
+
+Accumulator *-- Evaluator
+Accumulator *-- Element 
+Accumulator *-- Elements 
+
+Elements ..> Element
+
+NodeTraversor o-- NodeVisitor
+
+QueryParser o--  Evaluator
+
+ArrayList <|-- Elements
+
+'note'
+note top of Selector : CSS-like element selector, that finds elements matching a query 
+
+----

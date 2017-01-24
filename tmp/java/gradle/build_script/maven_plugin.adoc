@@ -1,0 +1,27 @@
+== Usage
+
+----
+apply plugin: 'maven'
+----
+
+== Tasks
+
+install
+
+== Interacting with Maven repositories
+
+=== Deploying to a Maven repository
+----
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/tmp/myRepo/")
+        }
+    }
+}
+---- 
+
+
+

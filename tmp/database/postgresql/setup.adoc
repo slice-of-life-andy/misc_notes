@@ -1,0 +1,6 @@
+sudo apt-get install postgresql-client
+sudo apt-get install postgresql postgresql-contrib
+
+ apt-cache search postgres
+
+sudo apt-get install pgadmin3

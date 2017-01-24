@@ -1,0 +1,25 @@
+== Declaring artifacts
+
+=== Archive task artifacts
+
+----
+task myJar(type: Jar)
+
+artifacts {
+    archives myJar
+}
+----
+
+===  File artifacts
+
+----
+def someFile = file('build/somefile.txt')
+
+artifacts {
+    archives someFile
+}
+----
+
+
+
+

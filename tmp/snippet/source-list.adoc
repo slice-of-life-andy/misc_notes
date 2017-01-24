@@ -1,0 +1,8 @@
+git clone http://192.168.5.100:8181/git/jefffu/ahamojo.git
+git clone http://192.168.5.100:8181/git/jefffu/dam.git
+git clone http://192.168.5.100:8181/git/jefffu/git-server.git
+git clone http://192.168.5.100:8181/git/jefffu/ahapage.git
+git clone http://192.168.5.100:8181/git/james/aha-web-generation.git
+git clone http://192.168.5.100:8181/git/andy/elasticsearch-snippet.git
+git clone http://192.168.5.100:8181/git/andy/elasticsearch-config.git
+git clone http://192.168.5.100:8181/git/renlibin/course.git

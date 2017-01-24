@@ -1,0 +1,65 @@
+curl -XPOST -H "Content-Type:applicatation/json" localhost:31311/test/test/3/_update -d '{"name":"andy","script": "ctx._source.name = \"aaa\"","upsert": { "field1": "value1","field2": "valueaha"}}'
+
+stdout output
+
+----
+{
+    "message" => {
+          "name" => "andy",
+        "upsert" => {
+            "field1" => "value1",
+            "field2" => "valueaha"
+        }
+    }
+}
+----
+
+elasticsearch document
+
+----
+andy@andy:~$ curl -XGET http://localhost:9200/user/profile/andy?pretty 
+{
+  "_index" : "user",
+  "_type" : "profile",
+  "_id" : "andy",
+  "_version" : 1,
+  "found" : true,
+  "_source" : {
+    "message" : {
+      "name" : "andy",
+      "upsert" : {
+        "field1" : "value1",
+        "field2" : "valueaha"
+      }
+    }
+  }
+}
+
+----
+
+access nested json object
+----
+ mutate {
+    remove_field => [ "[message][script]" ]
+  }
+
+
+output {
+  elasticsearch {
+        hosts => ["localhost:9200"]
+        index => "user"
+        document_type => "profile"
+        document_id => "%{[message][name]}"
+  }
+
+  stdout { codec => rubydebug }
+}
+
+----
+
+document_id refer the input/filter entry
+
+----
+document_id => "%{[message][name]}"
+document_id => "%{fingerprint}"
+----

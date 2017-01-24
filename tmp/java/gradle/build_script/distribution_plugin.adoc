@@ -1,0 +1,41 @@
+== Usage
+----
+apply plugin: 'distribution'
+----
+
+== Tasks
+
+distZip
+distTar
+assembleDist
+installDist	
+
+== Distribution contents 
+
+----
+apply plugin: 'distribution'
+
+version = '1.2'
+
+distributions {
+    main {
+        baseName = 'someName'
+        contents {
+            from { 'src'}
+        }
+    }
+}
+
+apply plugin:'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file:///home/andy/tmp/gradle/")
+        }
+    }
+}
+
+----
+
+

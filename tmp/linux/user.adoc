@@ -1,0 +1,2 @@
+setting the root user passwd
+sudo passwd root

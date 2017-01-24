@@ -1,0 +1,47 @@
+curl -XGET 'http://localhost:9200/twitter/tweet/_search' -d '{
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+'
+
+the default size is 10, from 0
+
+{
+    "from" : 0, "size" : 10,
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+sort
+
+{
+    "sort" : [
+        { "post_date" : {"order" : "asc"}},
+        "user",
+        { "name" : "desc" },
+        { "age" : "desc" },
+        "_score"
+    ],
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+
+sort mode option for multi-valued field
+curl -XPOST 'localhost:9200/_search' -d '{
+   "query" : {
+    ...
+   },
+   "sort" : [
+      {"price" : {"order" : "asc", "mode" : "avg"}}
+   ]
+}'
+
+missing values
+
+

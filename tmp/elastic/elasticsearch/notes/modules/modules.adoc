@@ -1,0 +1,42 @@
+org.elasticsearch.node.Node.java
+[source,java]
+----
+	    ModulesBuilder modules = new ModulesBuilder();
+            modules.add(new Version.Module(version));
+            modules.add(new CircuitBreakerModule(settings));
+            // plugin modules must be added here, before others or we can get crazy injection errors...
+            for (Module pluginModule : pluginsService.nodeModules()) {
+                modules.add(pluginModule);
+            }
+            modules.add(new PluginsModule(pluginsService));
+            modules.add(new SettingsModule(this.settings));
+            modules.add(new NodeModule(this));
+            modules.add(new NetworkModule());
+            modules.add(new ScriptModule(this.settings));
+            modules.add(new EnvironmentModule(environment));
+            modules.add(new NodeEnvironmentModule(nodeEnvironment));
+            modules.add(new ClusterNameModule(this.settings));
+            modules.add(new ThreadPoolModule(threadPool));
+            modules.add(new DiscoveryModule(this.settings));
+            modules.add(new ClusterModule(this.settings));
+            modules.add(new RestModule(this.settings));
+            modules.add(new TransportModule(settings));
+            if (settings.getAsBoolean(HTTP_ENABLED, true)) {
+                modules.add(new HttpServerModule(settings));
+            }
+            modules.add(new IndicesModule(settings));
+            modules.add(new SearchModule(settings));
+            modules.add(new ActionModule(false));
+            modules.add(new MonitorModule(settings));
+            modules.add(new GatewayModule(settings));
+            modules.add(new NodeClientModule());
+            modules.add(new PercolatorModule());
+            modules.add(new ResourceWatcherModule());
+            modules.add(new RepositoriesModule());
+            modules.add(new TribeModule());
+
+
+            pluginsService.processModules(modules);
+
+            injector = modules.createInjector();
+----

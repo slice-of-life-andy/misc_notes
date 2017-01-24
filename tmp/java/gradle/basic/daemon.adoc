@@ -1,0 +1,50 @@
+== Enabling the Daemon
+
+ add this line
+----
+org.gradle.daemon=true
+----
+ to the file «USER_HOME»/.gradle/gradle.properties,If that file doesn’t exist, just create it
+
+
+== Stopping an existing Daemon
+
+ every Daemon stops after 3 hours of inactivity. If you want to explicitly stop a Daemon process for any reason, just use the command gradle --stop
+
+== FAQ
+ 
+===  What ways are there to enable the Gradle Daemon?
+
+ . gradle wrapper  -Dorg.gradle.daemon=true
+ . touch ~/.gradle/gradle.properties && echo "org.gradle.daemon=true" >> ~/.gradle/gradle.properties
+
+The --daemon and --no-daemon command line switches enable and disable usage of the Daemon for individual build 
+
+=== How do I disable the Gradle Daemon?
+
+ --no-daemon command
+
+=== How do I suppress the “please consider using the Gradle Daemon” message?
+
+
+=== Why is there more than one Daemon process on my machine?
+
+=== Why is there more than one Daemon process on my machine?
+
+=== How much memory does the Daemon use and can I give it more?
+ 1GB
+
+=== How can I stop a Daemon?
+
+=== What can go wrong with Daemon?
+
+
+== When should I not use the Gradle Daemon?
+
+ It is recommend to not enable the Daemon for Continuous Integration and build server environments.
+
+== Tools & IDEs
+
+== How does the Gradle Daemon make builds faster?
+
+

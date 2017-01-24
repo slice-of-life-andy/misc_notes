@@ -1,0 +1,12 @@
+curl -XDELETE 'http://localhost:9200/twitter/tweet/1'
+
+
+with version
+
+curl -XDELETE 'http://localhost:9200/twitter/tweet/1?routing=kimchy'
+
+timeout
+curl -XDELETE 'http://localhost:9200/twitter/tweet/1?timeout=5m'
+
+
+curl -XDELETE 'http://localhost:9200/course/_query' -d '{"query" : {"match_all" : {} }}'

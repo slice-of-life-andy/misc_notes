@@ -1,0 +1,62 @@
+highlight type
+plain, postings, fast vector
+
+plain : default choice
+postings : set index_options to offsets
+fast vector : set term_vector with with_positions_offsets
+
+force highlighter type 
+
+The allowed values are: plain, postings and fvh. example:
+
+{
+    "query" : {...},
+    "highlight" : {
+        "fields" : {
+            "content" : {"type" : "plain"}
+        }
+    }
+}
+
+
+Force highlighting on source
+
+{
+    "query" : {...},
+    "highlight" : {
+        "fields" : {
+            "content" : {"force_source" : true}
+        }
+    }
+}
+
+
+Highlighting Tags
+default tag is <em></em>
+
+{
+    "query" : {...},
+    "highlight" : {
+        "pre_tags" : ["<tag1>"],
+        "post_tags" : ["</tag1>"],
+        "fields" : {
+            "_all" : {}
+        }
+    }
+}
+
+
+tags_schema
+with the following pre_tags
+{
+    "query" : {...},
+    "highlight" : {
+        "tags_schema" : "styled",
+        "fields" : {
+            "content" : {}
+        }
+    }
+}
+
+
+

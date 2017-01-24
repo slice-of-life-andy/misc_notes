@@ -1,0 +1,6 @@
+curl -XGET 'http://localhost:9200/twitter/tweet/_search?q=user:kimchy'
+
+
+parameters
+
+https://www.elastic.co/guide/en/elasticsearch/reference/current/search-uri-request.html

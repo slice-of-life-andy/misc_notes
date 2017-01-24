@@ -1,0 +1,41 @@
+
+== Parser Sequence diagram
+
+["plantuml","parser","png"]
+----
+[-> Parser : parse(String html, String baseUri)
+activate Parser
+
+Parser -> HtmlTreeBuilder : parse(String input, String baseUri, ParseErrorList errors)
+activate HtmlTreeBuilder
+
+HtmlTreeBuilder -> TreeBuilder : parse(String input, String baseUri, ParseErrorList errors)
+activate TreeBuilder
+
+TreeBuilder -> TreeBuilder : initialiseParse
+TreeBuilder -> TreeBuilder : runParser
+activate TreeBuilder
+	loop true
+		TreeBuilder -> Tokeniser : read()
+		activate Tokeniser
+		TreeBuilder <- Tokeniser : Token	
+		deactivate Tokeniser
+		TreeBuilder -> HtmlTreeBuilder : process(Token token)
+		alt token.type == Token.TokenType.EOF
+			TreeBuilder -> TreeBuilder : break
+		end
+		
+	end
+	
+deactivate TreeBuilder 
+
+
+HtmlTreeBuilder <- TreeBuilder : Document
+deactivate TreeBuilder 
+
+Parser <- HtmlTreeBuilder : Document
+deactivate HtmlTreeBuilder
+
+[<- Parser : 
+deactivate Parser
+----

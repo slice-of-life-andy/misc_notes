@@ -1,0 +1,3 @@
+* Time is not displaying in the Top Bar ?
+
+ sudo killall unity-panel-service

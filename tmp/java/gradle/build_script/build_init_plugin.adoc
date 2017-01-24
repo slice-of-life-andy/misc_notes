@@ -1,0 +1,25 @@
+== Tasks
+ init plugin 
+
+[options="header"]
+|====
+|Task name | Depends on | Type | Description
+|init|	wrapper|	InitBuild|	Generates a Gradle project.
+|wrapper|	-|	Wrapper|	Generates Gradle wrapper files.
+|====
+
+== What to set up
+
+gradle init --type java-library.
+
+== Build init types
+
+=== pom
+
+=== java-library
+
+=== scala-library
+
+=== groovy-library
+
+=== basic 

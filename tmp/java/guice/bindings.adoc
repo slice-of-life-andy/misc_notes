@@ -1,0 +1,117 @@
+Linked Bindings
+
+Linked bindings map a type to its implementation. This example maps the interface TransactionLog to the implementation DatabaseTransactionLog:
+
+[source,java]
+----
+public class BillingModule extends AbstractModule {
+  @Override 
+  protected void configure() {
+    bind(TransactionLog.class).to(DatabaseTransactionLog.class);
+  }
+}
+----
+
+Linked bindings can also be chained:
+
+[source,java]
+----
+public class BillingModule extends AbstractModule {
+  @Override 
+  protected void configure() {
+    bind(TransactionLog.class).to(DatabaseTransactionLog.class);
+    bind(DatabaseTransactionLog.class).to(MySqlDatabaseTransactionLog.class);
+  }
+}
+----
+
+
+== Binding Annotations
+
+[source,java]
+----
+package example.pizza;
+
+import com.google.inject.BindingAnnotation;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+
+@BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
+public @interface PayPal {}
+
+----
+
+You don't need to understand all of these meta-annotations, but if you're curious:
+
+* @BindingAnnotation tells Guice that this is a binding annotation. Guice will produce an error if ever multiple binding annotations apply to the same member.
+* @Target({FIELD, PARAMETER, METHOD}) is a courtesy to your users. It prevents @PayPal from being accidentally being applied where it serves no purpose.
+* @Retention(RUNTIME) makes the annotation available at runtime.
+
+To depend on the annotated binding, apply the annotation to the injected parameter:
+[source,java]
+----
+
+public class RealBillingService implements BillingService {
+
+  @Inject
+  public RealBillingService(@PayPal CreditCardProcessor processor,
+      TransactionLog transactionLog) {
+    ...
+  }
+----
+
+Lastly we create a binding that uses the annotation. This uses the optional annotatedWith clause in the bind() statement:
+[source,java]
+----
+    bind(CreditCardProcessor.class)
+        .annotatedWith(PayPal.class)
+        .to(PayPalCreditCardProcessor.class);
+----
+
+=== @Named
+
+
+Guice comes with a built-in binding annotation @Named that uses a string:
+[source,java]
+----
+public class RealBillingService implements BillingService {
+
+  @Inject
+  public RealBillingService(@Named("Checkout") CreditCardProcessor processor,
+      TransactionLog transactionLog) {
+    ...
+  }
+----
+
+To bind a specific name, use Names.named() to create an instance to pass to annotatedWith:
+[source,java]
+----
+    bind(CreditCardProcessor.class)
+        .annotatedWith(Names.named("Checkout"))
+        .to(CheckoutCreditCardProcessor.class);
+----
+
+=== Binding Annotations with Attributes
+
+
+== Instance Bindings
+
+You can bind a type to a specific instance of that type. This is usually only useful only for objects that don't have dependencies of their own, such as value objects:
+[source,java]
+----
+bind(String.class)
+        .annotatedWith(Names.named("JDBC URL"))
+        .toInstance("jdbc:mysql://localhost/pizza");
+    bind(Integer.class)
+        .annotatedWith(Names.named("login timeout seconds"))
+        .toInstance(10);
+
+----
+
+Avoid using .toInstance with objects that are complicated to create, since it can slow down application startup. You can use an @Provides method instead.
+
+

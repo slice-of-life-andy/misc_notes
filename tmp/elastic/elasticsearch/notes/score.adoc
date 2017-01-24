@@ -1,0 +1,44 @@
+== custom score
+
+=== function score
+
+[source,json]
+----
+GET /dam/asset/_search?pretty
+{
+  "query" : {
+    "function_score" : {
+      "functions" : [ {
+        "script_score" : {
+          "script" : "last_modified = doc['last_modified'].value;content_type = doc['content_type'].value;if (content_type.startsWith('text')) { return log((doc['last_modified'].value - req_date_stamp)/86400000 +1) };return log((doc['last_modified'].value - req_date_stamp)/86400000)",
+          "params" : {
+            "req_date_stamp" : 1220227200,
+            "one_day" : 86400000
+          }
+        }
+      } ]
+    }
+  }
+}
+----
+
+[source,java]
+----
+Map params = new HashMap<String, Long>();
+params.put("req_date_stamp", 1220227200);
+params.put("one_day", 86400000);
+
+String script = "last_modified = doc['last_modified'].value;content_type = doc['content_type'].value;if (content_type.startsWith('video')) { return log((doc['last_modified'].value - req_date_stamp)/86400000 +1) };return log((doc['last_modified'].value - req_date_stamp)/86400000)";
+
+searchRequestBuilder.setQuery(QueryBuilders.functionScoreQuery(ScoreFunctionBuilders.scriptFunction(script, params)));
+
+----
+
+ default script language is groovy.
+
+
+
+=== constant score
+
+
+

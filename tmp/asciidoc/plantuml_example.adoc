@@ -1,0 +1,80 @@
+Use case diagram
+["plantuml"]
+---------------------------------------------------------------------
+User -> (Start)
+User --> (Use the application) : Polish label-Zażółć gęślą jaźń
+
+:Main Admin: ---> (Use the application) : This is\nyet another\nlabel
+---------------------------------------------------------------------
+
+Sequence diagram
+["plantuml", "sequence.png"]
+---------------------------------------------------------------------
+participant User
+
+User -> A: DoWork
+activate A #FFBBBB
+
+A -> A: Internal call
+activate A #DarkSalmon
+
+A -> B: << createRequest >>
+activate B
+
+B --> A: RequestCreated
+deactivate B
+deactivate A
+A -> User: Done
+deactivate A
+---------------------------------------------------------------------
+
+State diagram
+["plantuml", "state.png", "png"]
+---------------------------------------------------------------------
+[*] --> NotShooting
+
+state NotShooting {
+  [*] --> Idle
+  Idle --> Configuring : EvConfig
+  Configuring --> Idle : EvConfig
+}
+
+state Configuring {
+  [*] --> NewValueSelection
+  NewValueSelection --> NewValuePreview : EvNewValue
+  NewValuePreview --> NewValueSelection : EvNewValueRejected
+  NewValuePreview --> NewValueSelection : EvNewValueSaved
+  
+  state NewValuePreview {
+     State1 -> State2
+  }
+  
+}
+---------------------------------------------------------------------
+
+Activity diagram
+["plantuml", "activity.png", "png"]
+---------------------------------------------------------------------
+(*)  --> "check input"
+If "input is verbose" then
+--> [Yes] "turn on verbosity"
+--> "run command"
+else
+--> "run command"
+Endif
+-->(*)
+---------------------------------------------------------------------
+
+Class diagram
+["plantuml", "class.png", "png"]
+---------------------------------------------------------------------
+class Object << general >>
+Object <|--- ArrayList
+
+note top of Object : In java, every class\nextends this one.
+
+note "This is a floating note" as N1
+note "This note is connected\nto several objects." as N2
+Object .. N2
+N2 .. ArrayList
+---------------------------------------------------------------------

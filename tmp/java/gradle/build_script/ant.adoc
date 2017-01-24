@@ -1,0 +1,150 @@
+== Using Ant tasks and types in your build
+
+ Using an Ant task
+----
+task hello << {
+    String greeting = 'hello from Ant'
+    ant.echo(message: greeting)
+}
+----
+
+Passing nested elements to an Ant task
+----
+task zip << {
+    ant.zip(destfile: 'archive.zip') {
+        fileset(dir: 'src') {
+            include(name: '**.xml')
+            exclude(name: '**.java')
+        }
+    }
+}
+----
+
+Using an Ant type
+
+----
+task list << {
+    def path = ant.path {
+        fileset(dir: 'libs', includes: '*.jar')
+    }
+    path.list().each {
+        println it
+    }
+}
+----
+
+=== Using custom Ant tasks in your build
+
+----
+task check << {
+    ant.taskdef(resource: 'checkstyletask.properties') {
+        classpath {
+            fileset(dir: 'libs', includes: '*.jar')
+        }
+    }
+    ant.checkstyle(config: 'checkstyle.xml') {
+        fileset(dir: 'src')
+    }
+}
+----
+
+----
+configurations {
+    pmd
+}
+
+dependencies {
+    pmd group: 'pmd', name: 'pmd', version: '4.2.5'
+}
+----
+
+----
+task check << {
+    ant.taskdef(name: 'pmd',
+                classname: 'net.sourceforge.pmd.ant.PMDTask',
+                classpath: configurations.pmd.asPath)
+    ant.pmd(shortFilenames: 'true',
+            failonruleviolation: 'true',
+            rulesetfiles: file('pmd-rules.xml').toURI().toString()) {
+        formatter(type: 'text', toConsole: 'true')
+        fileset(dir: 'src')
+    }
+}
+----
+
+== Importing an Ant build
+
+Importing an Ant build
+
+----
+ant.importBuild 'build.xml'
+----
+
+----
+<project>
+    <target name="hello">
+        <echo>Hello, from Ant</echo>
+    </target>
+</project>
+----
+
+Task that depends on Ant target
+----
+ant.importBuild 'build.xml'
+
+task intro(dependsOn: hello) << {
+    println 'Hello, from Gradle'
+}
+----
+
+Adding behaviour to an Ant target
+----
+ant.importBuild 'build.xml'
+
+hello << {
+    println 'Hello, from Gradle'
+}
+----
+
+Ant target that depends on Gradle task
+----
+ant.importBuild 'build.xml'
+
+task intro << {
+    println 'Hello, from Gradle'
+}
+----
+
+Renaming imported Ant targets
+----
+ant.importBuild('build.xml') { antTargetName ->
+    'a-' + antTargetName
+}
+----
+
+== Ant properties and references
+
+Setting an Ant property
+----
+ant.buildDir = buildDir
+ant.properties.buildDir = buildDir
+ant.properties['buildDir'] = buildDir
+ant.property(name: 'buildDir', location: buildDir)
+----
+
+
+Setting an Ant reference
+
+----
+ant.path(id: 'classpath', location: 'libs')
+ant.references.classpath = ant.path(location: 'libs')
+ant.references['classpath'] = ant.path(location: 'libs')
+----
+
+Getting an Ant reference
+----
+println ant.references.antPath
+println ant.references['antPath']
+----
+
+

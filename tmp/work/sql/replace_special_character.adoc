@@ -1,0 +1,3 @@
+UPDATE dam_asset SET path = regexp_replace(path, '[\s+|　| |#|%|&|\?|;|\+]+', '_', 'g'), artifact_id = regexp_replace(artifact_id, '[\s+|　| |#|%|&|\?|;|\+]+', '_', 'g') where  content_type like any (array['video%','image%']) and id = 1033
+
+UPDATE dam_asset SET path = regexp_replace(path, '[\s+|　| |#|%|&|\?|;|\+]+', '_', 'g'), artifact_id = regexp_replace(artifact_id, '[\s+|　| |#|%|&|\?|;|\+]+', '_', 'g') where  content_type ~ '(^image|^video)'

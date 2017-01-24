@@ -1,0 +1,53 @@
+== Cross project configuration
+
+== Subproject configuration
+
+Defining common behavior
+
+
+----
+allprojects {
+    task hello << {task -> println "I'm $task.project.name" }
+}
+subprojects {
+    hello << {println "- I depend on water"}
+}
+----
+
+Adding specific behavior
+----
+allprojects {
+    task hello << {task -> println "I'm $task.project.name" }
+}
+subprojects {
+    hello << {println "- I depend on water"}
+}
+project(':bluewhale').hello << {
+    println "- I'm the largest animal that has ever lived on this planet."
+}
+----
+
+
+=== Project filtering
+----
+allprojects {
+    task hello << {task -> println "I'm $task.project.name" }
+}
+subprojects {
+    hello << {println "- I depend on water"}
+}
+configure(subprojects.findAll {it.name != 'tropicalFish'}) {
+    hello << {println '- I love to spend time in the arctic waters.'}
+} 
+----
+
+Filtering by properties
+
+== Execution rules for multi-project builds
+
+
+== Project lib dependencies
+
+
+
+

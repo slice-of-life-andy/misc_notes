@@ -1,0 +1,71 @@
+===
+ Aggregations are divided in two main categories: metrics and bucket. Metrics aggregations
+refer to the statistical analysis of a group of documents, resulting in metrics
+such as the minimum value, maximum value, standard deviation, and much more. 
+
+Bucket aggregations divide matching documents into one or more containers
+(buckets) and then give you the number of documents in each bucket.
+
+== anatomy of aggregations
+
+* define aggs/aggregations
+* filter down result by post filters
+
+== structure of aggregations
+
+aggregations
+ aggs name
+   aggs type
+     aggs field
+
+
+== Filters and aggregations
+
+filters runs first, then query
+====
+% curl 'localhost:9200/get-together/group/_search?pretty' -d '{
+"query": {
+ "filtered": {
+ "filter": {
+ "term": {
+ "location": "denver"
+ }
+ }
+ }
+}}'
+====
+
+== Metrics aggregations
+
+=== statistics
+
+add search_type=count in the query url ,only return aggs result.
+
+===
+URI=localhost:9200/get-together/event/_search
+curl "$URI?pretty&search_type=count" -d '{
+"aggregations": {
+ "attendees_extended_stats": {
+ "extended_stats": {
+ "script": "doc['"'attendees'"'].values.length"
+ }
+ }
+===
+===
+curl "$URI?pretty&search_type=count" -d '{
+"aggregations": {
+ "attendees_stats": {
+ "stats": {
+ "script": "doc['"'attendees'"'].values.length"
+ }
+ }
+}}'
+===
+
+percentiles
+CARDINALITY
+==  Multi-bucket aggregations
+
+terms/range/hisogram/nested/reverse/children/geo distance/geohash grid aggregations/
+
+

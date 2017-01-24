@@ -1,0 +1,8 @@
+Returns a version for each search hit.
+
+{
+    "version": true,
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}

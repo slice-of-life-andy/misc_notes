@@ -1,0 +1,173 @@
+== Create Index
+
+curl -XPUT 'http://localhost:9200/twitter/'
+
+== Delete Index
+
+curl -XDELETE 'http://localhost:9200/twitter/'
+
+== Get Index
+
+curl -XGET 'http://localhost:9200/twitter/'
+
+== Indices Exists
+
+curl -XHEAD -i 'http://localhost:9200/twitter'
+
+== Open / Close Index API
+
+curl -XPOST 'localhost:9200/my_index/_open'
+curl -XPOST 'localhost:9200/my_index/_close'
+
+== Put Mapping
+
+$ curl -XPUT 'http://localhost:9200/twitter/_mapping/tweet' -d '
+{
+    "tweet" : {
+        "properties" : {
+            "message" : {"type" : "string", "store" : true }
+        }
+    }
+}
+'
+
+Multi Index
+
+curl -XPUT 'http://localhost:9200/kimchy,elasticsearch/_mapping/tweet' -d '
+{
+    "tweet" : {
+        "properties" : {
+            "message" : {"type" : "string", "store" : true }
+        }
+    }
+}
+'
+
+
+== Get Mapping
+
+curl -XGET 'http://localhost:9200/twitter/_mapping/tweet'
+
+=== Multiple Indices and Types
+
+To get mappings for all indices you can use _all for {index}. The following are some examples:
+
+curl -XGET 'http://localhost:9200/_mapping/twitter,kimchy'
+
+curl -XGET 'http://localhost:9200/_all/_mapping/tweet,book'
+If you want to get mappings of all indices and types then the following two examples are equivalent:
+
+curl -XGET 'http://localhost:9200/_all/_mapping'
+
+curl -XGET 'http://localhost:9200/_mapping'
+
+
+
+== Get Field Mapping
+
+curl -XGET 'http://localhost:9200/twitter/_mapping/tweet/field/text'
+
+=== Multiple Indices, Types and Fields
+
+curl -XGET 'http://localhost:9200/twitter,kimchy/_mapping/field/message'
+
+
+curl -XGET 'http://localhost:9200/_all/_mapping/tweet,book/field/message,user.id'
+
+curl -XGET 'http://localhost:9200/_all/_mapping/tw*/field/*.id'
+
+
+== Types Exists
+
+curl -XHEAD -i 'http://localhost:9200/twitter/tweet'
+
+== Delete Mapping
+
+[DELETE] /{index}/{type}
+
+[DELETE] /{index}/{type}/_mapping
+
+[DELETE] /{index}/_mapping/{type}
+
+== Index Aliases
+
+curl -XPOST 'http://localhost:9200/_aliases' -d '
+{
+    "actions" : [
+        { "add" : { "index" : "test1", "alias" : "alias1" } }
+    ]
+}'
+
+== Update Settings
+
+== Get Settings
+
+curl -XGET 'http://localhost:9200/twitter/_settings'
+
+== Analyze
+
+curl -XGET 'localhost:9200/_analyze?analyzer=standard' -d 'this is a test'
+
+It can also run against a specific index:
+
+curl -XGET 'localhost:9200/test/_analyze?text=this+is+a+test'
+
+curl -XGET 'localhost:9200/test/_analyze?analyzer=whitespace' -d 'this is a test'
+Also, the analyzer can be derived based on a field mapping, for example:
+
+curl -XGET 'localhost:9200/test/_analyze?field=obj1.field1' -d 'this is a test'
+
+== Index Templates
+
+
+curl -XPUT localhost:9200/_template/template_1 -d '
+{
+    "template" : "te*",
+    "settings" : {
+        "number_of_shards" : 1
+    },
+    "mappings" : {
+        "type1" : {
+            "_source" : { "enabled" : false }
+        }
+    }
+}
+'
+
+=== Deleting a Template
+
+curl -XDELETE localhost:9200/_template/template_1
+
+=== GETting templates
+
+curl -XGET localhost:9200/_template/template_1
+curl -XGET localhost:9200/_template/
+
+=== Templates exists
+
+curl -XHEAD -i localhost:9200/_template/template_1
+
+== Status
+
+curl -XGET 'http://localhost:9200/twitter/_status'
+
+=== Multi Index
+
+curl -XGET 'http://localhost:9200/kimchy,elasticsearch/_status'
+
+curl -XGET 'http://localhost:9200/_status'
+
+== Stats
+
+curl localhost:9200/_stats?pretty
+
+Specific index stats can be retrieved using:
+
+curl localhost:9200/index1,index2/_stats
+
+== Indices Segments
+
+curl -XGET 'http://localhost:9200/test/_segments'
+curl -XGET 'http://localhost:9200/test1,test2/_segments'
+curl -XGET 'http://localhost:9200/_segments'
+

@@ -1,0 +1,33 @@
+== Structure of a multi-project build
+
+list projects in a build
+
+----
+gradle -q projects
+
+------------------------------------------------------------
+Root project
+------------------------------------------------------------
+
+Root project 'multiproject'
++--- Project ':api'
++--- Project ':services'
+|    +--- Project ':services:shared'
+|    \--- Project ':services:webservice'
+\--- Project ':shared'
+
+To see a list of the tasks of a project, run gradle <project-path>:tasks
+For example, try running gradle :api:tasks
+----
+
+The root build.gradle is often used to share common configuration between the child projects
+
+== Executing a multi-project build
+ execute specifictask two options here:
+
+. change to sub project, run gradle <task>
+. from root dir example : gradle :services:webservice:build will build the webservice subproject and any subprojects it depends on.
+
+the leading ‘:’ represents the root project itself
+
+

@@ -1,0 +1,48 @@
+scroll api used to retrieve the large numbers of results
+
+
+curl -XGET 'localhost:9200/twitter/tweet/_search?scroll=1m' -d '
+{
+    "query": {
+        "match" : {
+            "title" : "elasticsearch"
+        }
+    }
+}
+'
+
+
+curl -XGET  'localhost:9200/_search/scroll?scroll=1m'  \
+     -d       'c2Nhbjs2OzM0NDg1ODpzRlBLc0FXNlNyNm5JWUc1' 
+
+
+The URL should not include the index or type name — these are specified in the original search request instead.
+
+
+scroll-scan
+scroll-scall no sorting
+add search_type=scan to the query 
+localhost:9200/twitter/tweet/_search?scroll=1m&search_type=scan'  -d '
+{
+    "query": {
+        "match" : {
+            "title" : "elasticsearch"
+        }
+    }
+}
+'
+
+You can check how many search contexts are open with the nodes stats API:
+
+curl -XGET localhost:9200/_nodes/stats/indices/search?pretty
+
+curl -XDELETE localhost:9200/_search/scroll  -d 'c2Nhbjs2OzM0NDg1ODpzRlBLc0FXNlNyNm5JWUc1' 
+
+Multiple scroll IDs can be passed as comma separated values:
+
+curl -XDELETE localhost:9200/_search/scroll -d 'c2Nhbjs2OzM0NDg1ODpzRlBLc0FXNlNyNm5JWUc1,aGVuRmV0Y2g7NTsxOnkxaDZ'
+
+curl -XDELETE localhost:9200/_search/scroll/_all
+
+
+

@@ -1,0 +1,8 @@
+== Usage
+----
+apply plugin: 'build-dashboard'
+----
+
+== Tasks
+
+

@@ -1,0 +1,59 @@
+= dockerfile
+
+== example
+
+example from https://github.com/swagger-api/swagger-ui/blob/master/Dockerfile
+----
+FROM    ubuntu:14.04
+MAINTAINER dnephin@gmail.com
+
+ENV     DEBIAN_FRONTEND noninteractive
+
+RUN     apt-get update && apt-get install -y git npm nodejs openjdk-7-jre
+RUN     ln -s /usr/bin/nodejs /usr/local/bin/node
+
+WORKDIR /build
+ADD     package.json    /build/package.json
+RUN     npm install
+ADD     .   /build
+CMD     ./node_modules/gulp/bin/gulp.js serve
+----
+
+
+FROM 
+
+
+== .dockerignore
+
+ exclude files and dirs listed in the .dockerignore
+
+*/temp*
+----
+Exclude files and directories whose names start with temp in any immediate subdirectory of the root. For example, the plain file /somedir/temporary.txt is excluded, as is the directory /somedir/temp.
+----
+
+Lines starting with !
+All markdown files except README.md are excluded from the context.
+----
+ *.md
+ !README.md
+----
+
+
+== FROM
+
+ sets the Base Image for subsequent instructions.  
+
+FROM <image>
+
+OR
+
+FROM <image>:<tag>
+
+OR
+
+FROM <image>@<digest>
+
+
+
+

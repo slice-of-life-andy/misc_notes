@@ -1,0 +1,143 @@
+= CDI
+
+Managed Bean
+
+* It is not a nonstatic inner class.
+
+* It is a concrete class or is annotated @Decorator.
+
+* It is not annotated with an EJB component-defining annotation or declared as an EJB bean class in ejb-jar.xml.
+
+* It does not implement javax.enterprise.inject.spi.Extension.
+
+* It has an appropriate constructor. That is, one of the following is the case.
+
+** The class has a constructor with no parameters.
+
+** The class declares a constructor annotated @Inject.
+
+ Managed Beans are defined as container-managed objects with minimal programming restrictions
+
+bean archive
+
+ A bean archive is any module that contains beans that the CDI runtime can manage and inject.
+ There are two kinds of bean archives: explicit bean archives and implicit bean archives.
+ An explicit bean archive is an archive that contains a beans.xml deployment descriptor
+ An implicit bean archive is an archive that contains some beans annotated with a scope type, contains no beans.xml deployment descriptor, or contains a beans.xml deployment descriptor with the bean-discovery-mode attribute set to annotated.
+
+ In an implicit archive, CDI can only manage and inject beans annotated with a scope type.
+
+ For a web application, the beans.xml deployment descriptor, if present, must be in the WEB-INF directory.
+
+
+Alternative
+
+ We can choose between alternatives at deployment time by selecting an alternative in the CDI deployment descriptor META-INF/beans.xml of the jar or Java EE module that uses it.
+
+Specialization
+
+
+natomy of a bean
+
+* A (nonempty) set of bean types
+* A (nonempty) set of qualifiers
+* A scope
+* Optionally, a bean EL name
+* A set of interceptor bindings
+* A bean implementation
+
+
+ contract(DI) 
+ bean type & qualifier
+
+ bean type is a user-defined class or interface; a type that is client-visible.
+
+ Bean types may be restricted to an explicit set by annotating the bean with the @Typed annotation and listing the classes that should be bean types.
+ 
+ A qualifier is a user-defined annotation that is itself annotated @Qualifier.
+
+ The scope of a bean defines the lifecycle and visibility of its instances.
+
+ Named @Named, if you want to reference the bean in the non-Java code, you must using the @Named annotation
+
+ An interceptor binding type is a user-defined annotation that is itself annotated @InterceptorBinding. 
+  
+ We can enable an interceptor using the CDI deployment descriptor META-INF/beans.xml of the jar or Java EE module 
+
+
+@ManagedBean
+
+
+
+Injection point 
+
+constructor,method,field
+
+qualifiers
+
+default qualifier :@Default and @Any
+
+producer method
+A producer method acts as a source of objects to be injected
+
+The Interceptors specification defines three kinds of interception points:
+
+* business method interception,
+* lifecycle callback interception, and
+* timeout method interception (EJB only).
+
+
+@AroundInvoke,@PostConstruct,@AroundTimeout
+
+
+@InterceptorBinding , @Interceptor
+
+
+Enabling interceptors
+
+* beans.xml
+* @Priority
+
+interceptor 不关心拦截的events的语义,所以用interceptor拦截逻辑相关的events是不恰当的
+
+
+a decorator intercepts invocations only for a certain Java interface, and is therefore aware of all the semantics attached to that interface.
+
+
+events producer,observer
+
+There are five kinds of transactional observers:
+* IN_PROGRESS 
+* AFTER_SUCCESS
+* AFTER_FAILURE
+* AFTER_COMPLETION
+* BEFORE_COMPLETION
+
+
+
+
+* Event
+ 
+ fire observe
+
+* DI
+
+ Inject produces
+
+* Interceptor
+ 
+ InterceptorBinding  
+ use  Interceptor and InterceptorBinding define custome Interceptor
+ use InterceptorBinding annotate the method(need intercept)
+ beans.xml explicite enable custome Interceptor 
+
+* Decorator
+ 
+ Decorator annotation 
+ Decorator pattern
+ 
+* Scope
+
+ context Contextual CreationalContext 
+  
+* portable extension

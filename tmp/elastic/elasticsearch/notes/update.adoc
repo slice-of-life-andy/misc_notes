@@ -1,0 +1,33 @@
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.counter += count",
+    "params" : {
+        "count" : 4
+    }
+}'
+
+
+
+In addition to _source, the following variables are available through the ctx map: _index, _type, _id, _version, _routing, _parent, _timestamp, _ttl.
+
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.tags.contains(tag) ? ctx.op = \"delete\" : ctx.op = \"none\"",
+    "params" : {
+        "tag" : "blue"
+    }
+}'
+
+
+partial update 
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "doc" : {
+        "name" : "new_name"
+    }
+}'
+
+entire update 
+curl -XPOST localhost:9200/test/type1/1 -d '{
+    "counter" : 1,
+    "tags" : ["red"]
+}'

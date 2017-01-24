@@ -1,0 +1,34 @@
+= Registry Spec API
+
+* /v2/_catalog
+* /v2/<name>/tags/list
+* /v2/<name>/manifests/<reference>
+
+=== /v2/_catalog
+
+ list of repositories available in the registry.
+
+[source,shell]
+----
+andy@andy:~/tmp$ curl localhost:5000/v2/_catalog
+{"repositories":["test","ubuntu"]}
+----
+
+==== /v2/<name>/tags/list
+
+ Fetch the tags under the repository identified by``name``
+ 
+[source,shell]
+----
+andy@andy:~/tmp$ curl localhost:5000/v2/ubuntu/tags/list
+{"name":"ubuntu","tags":["14.04-v2","latest"]}
+----
+
+==== /v2/<name>/manifests/<reference>
+
+ Fetch the manifest identified by ``name`` and ``reference`` where ``reference`` can be a tag or digest.
+ 
+[source,shell]
+----
+andy@andy:~/tmp$ curl localhost:5000/v2/ubuntu/manifests/14.04-v2
+----

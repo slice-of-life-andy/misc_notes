@@ -1,0 +1,27 @@
+== Head
+
+https://github.com/mobz/elasticsearch-head
+
+elasticsearch/bin/plugin -install mobz/elasticsearch-head
+elasticsearch/bin/plugin -install mobz/elasticsearch-head/1.x
+
+http://localhost:9200/_plugin/head/
+
+== JDBC 
+
+https://github.com/jprante/elasticsearch-jdbc
+
+http://xbib.org/repository/org/xbib/elasticsearch/importer/elasticsearch-jdbc/
+
+wget http://xbib.org/repository/org/xbib/elasticsearch/importer/elasticsearch-jdbc/1.7.1.0/elasticsearch-jdbc-1.7.1.0-dist.zip
+
+unzip elasticsearch-jdbc-1.7.1.0-dist.zip
+
+== Smartcn
+
+https://github.com/elastic/elasticsearch-analysis-smartcn
+
+bin/plugin install elasticsearch/elasticsearch-analysis-smartcn/2.7.0
+
+
+sudo bin/plugin install analysis-smartcn

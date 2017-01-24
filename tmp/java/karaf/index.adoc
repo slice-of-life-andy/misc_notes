@@ -1,0 +1,13 @@
+current feature repo
+
+org.ops4j.pax.web-4.1.2           | mvn:org.ops4j.pax.web/pax-web-features/4.1.2/xml/features
+framework-4.0.0-SNAPSHOT          | mvn:org.apache.karaf.features/framework/4.0.0-SNAPSHOT/xml/features
+git-server-feature                | mvn:com.ahamojo/git-server-feature/1.0-SNAPSHOT/xml/features
+org.ops4j.pax.cdi-0.12.0-SNAPSHOT | mvn:org.ops4j.pax.cdi/pax-cdi-features/0.12.0-SNAPSHOT/xml/features
+spring-4.0.0-SNAPSHOT             | mvn:org.apache.karaf.features/spring/4.0.0-SNAPSHOT/xml/features
+standard-4.0.0-SNAPSHOT           | mvn:org.apache.karaf.features/standard/4.0.0-SNAPSHOT/xml/features
+enterprise-4.0.0-SNAPSHOT         | mvn:org.apache.karaf.features/enterprise/4.0.0-SNAPSHOT/xml/features
+
+
+
+

@@ -1,0 +1,110 @@
+= 容器
+
+简单的说，容器是独立运行的一个或一组应用，以及它们的运行态环境。对应的，虚拟机可以理解为模拟运行的一整套操作系统（提供了运行态环境和其他系统环境）和跑在上面的应用。
+
+== 启动容器
+----
+``sudo docker run -t -i ubuntu:14.04 /bin/bash``
+----
+其中，``-t`` 选项让Docker分配一个伪终端（pseudo-tty）并绑定到容器的标准输入上， ``-i`` 则让容器的标准输入保持打开。
+
+
+
+启动已终止容器
+
+可以利用 ``docker start`` 命令，直接将一个已经终止的容器启动运行。
+
+
+== 后台(background)运行
+
+----
+``sudo docker run ubuntu:14.04 /bin/sh -c "while true; do echo hello world; sleep 1; done"``
+----
+
+----
+``sudo docker run -d ubuntu:14.04 /bin/sh -c "while true; do echo hello world; sleep 1; done"``
+----
+----
+``sudo docker ps``
+----
+----
+``sudo docker logs [container ID or NAMES]``
+----
+
+== 终止容器
+
+----
+docker stop
+----
+
+终止状态的容器可以用 ``docker ps -a`` 命令看到
+----
+``sudo docker ps -a``
+----
+
+
+----
+docker restart 
+----
+
+== 进入容器
+
+----
+``docker exec -it [container-id] bash``
+----
+
+
+== list containers
+
+----
+$ docker ps # Lists only running containers
+$ docker ps -a # Lists all containers
+----
+
+== export container
+
+[source,shell]
+----
+$ sudo docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                    PORTS               NAMES
+7691a814370e        ubuntu:14.04        "/bin/bash"         36 hours ago        Exited (0) 21 hours ago                       test
+$ sudo docker export 7691a814370e > ubuntu.tar
+----
+
+这样将导出容器快照到本地文件。
+
+== import container snapshot
+
+可以使用 ``docker import`` 从容器快照文件中再导入为镜像
+[source,shell]
+----
+$ cat ubuntu.tar | sudo docker import - test/ubuntu:v1.0
+$ sudo docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              VIRTUAL SIZE
+test/ubuntu         v1.0                9d37a6082e97        About a minute ago   171.3 MB
+----
+
+此外，也可以通过指定 URL 或者某个目录来导入，例如
+
+[source,shell]
+----
+$sudo docker import http://example.com/exampleimage.tgz example/imagerepo
+
+----
+
+*注：用户既可以使用 ``docker load`` 来导入镜像存储文件到本地镜像库，也可以使用 ``docker import`` 来导入一个容器快照到本地镜像库。这两者的区别在于容器快照文件将丢弃所有的历史记录和元数据信息（即仅保存容器当时的快照状态），而镜像存储文件将保存完整记录，体积也要大。此外，从容器快照文件导入时可以重新指定标签等元数据信息。
+
+
+== delete container 
+
+----
+``sudo docker rm  trusting_newton``
+----
+
+如果要删除一个运行中的容器，可以添加 ``-f`` 参数。Docker 会发送 ``SIGKILL`` 信号给容器。
+
+
+
+
+
+

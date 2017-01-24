@@ -1,0 +1,33 @@
+== Delete
+
+=== delete current character
+
+x
+
+=== delete delete current word
+
+dw
+
+=== delete current line
+
+dd
+
+=== delete five lines
+
+5dd
+
+=== delete from cursor to the begining of the line 
+
+d0
+
+=== delete from cursor to the end of the line 
+
+d$
+
+=== delete all the lines from cursor to the begining of the file
+
+:1,.d
+
+=== delete all the lines from cursor to the end of the file
+
+:.,$d

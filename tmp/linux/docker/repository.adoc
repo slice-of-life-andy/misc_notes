@@ -1,0 +1,60 @@
+= Repository
+
+仓库（Repository）是集中存放镜像的地方。
+
+
+== docker Hub
+
+hub.docker.com
+
+login
+
+----
+docker login
+
+----
+
+查找镜像
+----
+sudo docker search centos
+sudo docker search -s 5 centos
+----
+在查找的时候通过 ``-s N`` 参数可以指定仅显示评价为 ``N`` 星以上的镜像。
+
+
+下载镜像到本地。
+----
+``sudo docker pull centos``
+----
+
+
+
+
+
+ 自动创建
+ 
+ 
+== 私有仓库
+
+可以创建本地仓库，参考https://github.com/docker/distribution
+
+[source,shell]
+----
+docker run -d -p 5000:5000 --restart=always --name registry \
+  -v `pwd`/data:/var/lib/registry \
+  registry:2
+----
+
+----
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+----
+
+----
+sudo docker tag e9ae3c220b23 localhost:5000/ubuntu
+sudo docker push localhost:5000/ubuntu
+sudo docker pull localhost:5000/ubuntu
+sudo docker stop registry
+docker rm -v registry
+----
+
+

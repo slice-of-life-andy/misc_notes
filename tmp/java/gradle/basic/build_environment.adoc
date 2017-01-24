@@ -1,0 +1,61 @@
+== Configuring the build environment via gradle.properties
+
+configuration is applied in following order (if an option is configured in multiple locations the last one wins):
+
+. from gradle.properties in project build dir.
+. from gradle.properties in gradle user home.
+. from system properties, e.g. when -Dsome.property is set on the command line.
+
+优先级:system properties > user home properties > build dir properties
+
+The following properties can be used to configure the Gradle build environment:
+
+. org.gradle.daemon
+. org.gradle.java.home
+. org.gradle.jvmargs
+. org.gradle.configureondemand
+. org.gradle.parallel
+. org.gradle.workers.max
+. org.gradle.debug
+
+== Gradle properties and system properties
+
+gradle.properties
+----
+gradlePropertiesProp=gradlePropertiesValue
+sysProp=shouldBeOverWrittenBySysProp
+envProjectProp=shouldBeOverWrittenByEnvProp
+systemProp.system=systemValue
+----
+
+build.gradle
+----
+task printProps << {
+    println commandLineProjectProp
+    println gradlePropertiesProp
+    println systemProjectProp
+    println envProjectProp
+    println System.properties['system']
+}
+----
+gradle -q -PcommandLineProjectProp=commandLineProjectPropValue -Dorg.gradle.project.systemProjectProp=systemPropertyValue printProps
+
+== Accessing the web via a proxy
+
+
+gradle.properties
+----
+systemProp.http.proxyHost=www.somehost.org
+systemProp.http.proxyPort=8080
+systemProp.http.proxyUser=userid
+systemProp.http.proxyPassword=password
+systemProp.http.nonProxyHosts=*.nonproxyrepos.com|localhost
+
+systemProp.https.proxyHost=www.somehost.org
+systemProp.https.proxyPort=8080
+systemProp.https.proxyUser=userid
+systemProp.https.proxyPassword=password
+systemProp.https.nonProxyHosts=*.nonproxyrepos.com|localhost
+----
+
+

@@ -1,0 +1,159 @@
+= command
+
+
+== run
+
+ run a process in a new container
+
+docker run image_name process
+----
+docker run -it -d -e LANG=en_US.utf8 -p 9300:9300 -p 9200:9200 --dns 192.168.5.6 -v /etc/timezone:/etc/timezone:ro -v /etc/localtime:/etc/localtime:ro -v /etc/ahamojo/elasticsearch/build_index:/etc/ahamojo/elasticsearch/config -v /opt/data/elasticsearch:/opt/elasticsearch/data -v /var/log/elasticsearch:/opt/elasticsearch/logs --name elasticsearch docker.ahamojo.com:5000/gentoo:elasticsearch /opt/elasticsearch/bin/elasticsearch /opt/elasticsearch-jdbc/bin/postgresql-course.sh /opt/elasticsearch-jdbc/bin/postgresql-dam.sh /opt/elasticsearch-jdbc/bin/postgresql-project.sh
+----
+
+-P flag is new and tells Docker to map any required network ports inside our container to our host
+----
+docker run -d -P training/webapp python app.py
+----
+
+
+== ps
+
+ list containers
+
+ list running containers
+
+docker ps 
+----
+docker ps
+----
+
+get details of the last container started
+----
+docker ps -l
+----
+
+list all container
+----
+docker ps -a
+----
+
+Controlling containers
+
+== start 
+
+ start container
+
+docker start container
+----
+docker start happy_jepsen
+----
+
+== stop
+
+ stop container
+
+docker start container
+----
+docker stop happy_jepsen
+----
+
+== restart
+ 
+ restart container
+
+----
+docker restart happy_jepsen
+----
+
+== rm
+
+ remove container
+
+docker start container
+----
+docker rm happy_jepsen
+----
+
+== kill
+
+ kill container
+----
+docker kill happy_jepsen
+----
+
+````
+
+== top
+ 
+ examine the processes running inside container
+
+docker top container
+----
+docker top dashboard
+----
+
+
+
+== port
+
+
+ docker port container port 
+
+docker start container
+----
+andy # docker port dashboard 
+8181/tcp -> 0.0.0.0:8009
+andy # docker port dashboard 8181
+0.0.0.0:8009
+andy #
+----
+
+
+== inspect 
+
+  take a low-level dive into our Docker container using the docker inspect command
+
+docker inspect container
+----
+docker inspect happy_jepsen
+----
+
+
+
+== log 
+
+ Shows us the standard output of a container
+ 
+docker logs container
+----
+docker logs happy_jepsen
+----
+
+
+== history
+
+ Show the history of an image
+
+docker history image
+----
+docker history 8803b54def9f
+----
+
+
+== inspect ip
+
+----
+docker exec [container-id or container-name] cat /etc/hosts
+----
+
+----
+docker inspect [container-id or container-name]
+----
+
+== docker link e
+
+----
+docker run -d --name es0 -p 9200:9200                    es
+docker run -d --name es1 --link es0 -e UNICAST_HOSTS=es0 es
+docker run -d --name es2 --link es0 -e UNICAST_HOSTS=es0 es
+----

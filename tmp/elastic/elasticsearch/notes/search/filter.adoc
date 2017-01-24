@@ -1,0 +1,40 @@
+disable _source retrieval set to false
+{
+    "_source": false,
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+wildcard patterns
+{
+    "_source": "obj.*",
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+or
+
+{
+    "_source": [ "obj1.*", "obj2.*" ],
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+{
+    "_source": {
+        "include": [ "obj1.*", "obj2.*" ],
+        "exclude": [ "*.description" ]
+    },
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+
+

@@ -1,0 +1,21 @@
+== type of plugins
+
+scripts and binary
+
+== Applying plugins
+
+script plugins
+----
+
+apply from: 'other.gradle'
+----
+
+binary plugins 
+----
+apply plugin: 'java'
+----
+
+
+== Applying plugins with the buildscript block
+
+

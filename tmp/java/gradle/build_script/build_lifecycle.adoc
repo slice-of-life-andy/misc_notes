@@ -1,0 +1,150 @@
+== Build phases
+
+A Gradle build has three distinct phases.
+
+. Initialization 哪些项目参与build，为每个project创建Project实例
+. Configuration　During this phase the project objects are configured.
+. Execution　Gradle determines the subset of the tasks, created and configured during the configuration phase, to be executed. 
+
+== Settings file
+
+settings.gradle
+----
+println 'This is executed during the initialization phase.'
+----
+
+build.gradle
+----
+println 'This is executed during the configuration phase.'
+
+task configured {
+    println 'This is also executed during the configuration phase.'
+}
+
+task test << {
+    println 'This is executed during the execution phase.'
+}
+
+task testBoth {
+    doFirst {
+      println 'This is executed first during the execution phase.'
+    }
+    doLast {
+      println 'This is executed last during the execution phase.'
+    }
+    println 'This is executed during the configuration phase as well.'
+}
+----
+== Multi-project builds
+
+=== Project locations
+
+=== Building the tree
+
+==== Hierarchical layouts
+settings.gradle
+----
+include 'project1', 'project2:child', 'project3:child1'
+----
+
+==== Flat layouts
+settings.gradle
+----
+includeFlat 'project3', 'project4'
+----
+
+== Modifying elements of the project tree
+
+----
+println rootProject.name
+println project(':projectA').name
+----
+
+----
+rootProject.name = 'main'
+project(':projectA').projectDir = new File(settingsDir, '../my-project-a')
+project(':projectA').buildFileName = 'projectA.gradle'
+----
+
+== Initialization
+读取setttngs.gradle
+确定哪些项目参与运算
+
+== Configuration and execution of a single project build
+
+
+== Responding to the lifecycle in the build script
+
+=== Project evaluation
+
+Adding of test task to each project which has certain property set
+----
+allprojects {
+    afterEvaluate { project ->
+        if (project.hasTests) {
+            println "Adding test task to $project"
+            project.task('test') << {
+                println "Running tests for $project"
+            }
+        }
+    }
+}
+----
+
+build.gradle
+----
+hasTests = true
+----
+
+Notifications
+
+----
+gradle.afterProject {project, projectState ->
+    if (projectState.failure) {
+        println "Evaluation of $project FAILED"
+    } else {
+        println "Evaluation of $project succeeded"
+    }
+}
+
+----
+
+===  Task creation
+
+----
+tasks.whenTaskAdded { task ->
+    task.ext.srcDir = 'src/main/java'
+}
+
+task a
+
+println "source dir is $a.srcDir"
+
+----
+
+=== Task execution graph ready
+
+=== Task execution
+
+----
+task ok
+
+task broken(dependsOn: ok) << {
+    throw new RuntimeException('broken')
+}
+
+gradle.taskGraph.beforeTask { Task task ->
+    println "executing $task ..."
+}
+
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if (state.failure) {
+        println "FAILED"
+    }
+    else {
+        println "done"
+    }
+}
+----
+
+

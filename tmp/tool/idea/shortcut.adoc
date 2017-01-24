@@ -1,0 +1,48 @@
+= shortcuts
+
+kbd:[Ctrl+Y]	delete current line
+
+kbd:[Ctrl+X]	delte line 
+
+kbd:[Ctrl+D]	copy line
+
+kbd:[Ctrl+Q]	view api doc	
+
+kbd:[Ctrl+F12]	out line
+
+kbd:[Ctrl+Alt+O]	optimize package
+
+kbd:[Ctrl+Space]	code completion
+
+kbd:[Ctrl+Shift+U]	Toggle case	
+
+kbd:[Alt+Insert]	Generate code	
+
+kbd:[sout + Tab]	System.out.println()	
+
+kbd:[psvm]	main method
+
+kbd:[F3]	Find next	
+
+kbd:[Shift + F3]	Find previous 
+
+kbd:[Alt + Enter]	Show intention actions and quick-fixes	
+
+
+
+
+|===
+|Shortcut |Purpose
+
+|kbd:[F11]
+|Toggle fullscreen
+
+|kbd:[Ctrl+T]
+|Open a new tab
+
+|kbd:[Ctrl+Shift+N]
+|New incognito window
+
+|kbd:[Ctrl + +]
+|Increase zoom
+|===

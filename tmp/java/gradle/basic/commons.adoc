@@ -1,0 +1,4 @@
+==== skip unit test and integration test example
+----
+gradle build -x test -x integTest
+----

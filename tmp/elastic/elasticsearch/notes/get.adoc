@@ -1,0 +1,86 @@
+curl -XGET 'http://localhost:9200/twitter/tweet/1'
+
+
+check existence
+curl -XHEAD -i 'http://localhost:9200/twitter/tweet/1'
+
+
+source filtering
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1?_source=false'
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1?_source_include=*.id&_source_exclude=entities'
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1?_source=*.id,retweeted'
+
+
+return stored field
+curl -XGET 'http://localhost:9200/twitter/tweet/1?fields=title,content,message'
+
+
+
+get _source directly
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1/_source'
+curl -XGET 'http://localhost:9200/twitter/tweet/1/_source?_source_include=*.id&_source_exclude=entities
+curl -XHEAD -i 'http://localhost:9200/twitter/tweet/1/_source'
+
+Routing
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1?routing=kimchy'
+
+if the routing not specified ,the document will not be fetched
+
+
+multi-get
+
+curl 'localhost:9200/_mget' -d '{
+    "docs" : [
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "1"
+        },
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "2"
+        }
+    ]
+}'
+
+
+curl 'localhost:9200/test/_mget' -d '{
+    "docs" : [
+        {
+            "_type" : "type",
+            "_id" : "1"
+        },
+        {
+            "_type" : "type",
+            "_id" : "2"
+        }
+    ]
+}'
+
+
+curl 'localhost:9200/test/type/_mget' -d '{
+    "docs" : [
+        {
+            "_id" : "1"
+        },
+        {
+            "_id" : "2"
+        }
+    ]
+}'
+
+curl 'localhost:9200/test/type/_mget' -d '{
+    "ids" : ["1", "2"]
+}'
+
+
+type is optional
+
+
+

@@ -1,0 +1,7 @@
+Technically,a shard is a directory of files where Lucene stores the data for your index. A shard is also the smallest unit that Elasticsearch moves from node to node.
+
+node is an instance of Elasticsearch
+
+shard is a Lucene index: a directory of files containing an inverted index.
+
+ 

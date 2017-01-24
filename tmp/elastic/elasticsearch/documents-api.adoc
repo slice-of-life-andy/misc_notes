@@ -1,0 +1,366 @@
+single doc
+
+== Index API
+
+[source,shell]
+----
+$ curl -XPUT 'http://localhost:9200/twitter/tweet/1' -d '{
+    "user" : "kimchy",
+    "post_date" : "2009-11-15T14:12:12",
+    "message" : "trying out Elasticsearch"
+}'
+----
+
+=== Automatic Index Creationedit
+
+Note that the format of the JSON document can also include the type (very handy when using JSON mappers) if the index.mapping.allow_type_wrapper setting is set to true, for example:
+
+[source,shell]
+----
+$ curl -XPOST 'http://localhost:9200/twitter' -d '{
+  "settings": {
+    "index": {
+      "mapping.allow_type_wrapper": true
+    }
+  }
+}'
+----
+
+
+Automatic index creation can be disabled by setting action.auto_create_index to false in the config file of all nodes. Automatic mapping creation can be disabled by setting index.mapper.dynamic to false in the config files of all nodes 
+
+
+=== Versioning
+
+
+version types ?
+
+operation type
+
+=== Automatic ID Generation
+
+
+=== Routing
+
+[source,shell]
+----
+$ curl -XPOST 'http://localhost:9200/twitter/tweet?routing=kimchy' -d '{
+    "user" : "kimchy",
+    "post_date" : "2009-11-15T14:12:12",
+    "message" : "trying out Elasticsearch"
+}'
+----
+
+Parents & Children
+
+A child document can be indexed by specifying its parent when indexing. For example:
+
+$ curl -XPUT localhost:9200/blogs/blog_tag/1122?parent=1111 -d '{
+    "tag" : "something"
+}'
+When indexing a child document, the routing value is automatically set to be the same as its parent, unless the routing value is explicitly specified using the routing parameter.
+
+
+tamp
+
+A document can be indexed with a timestamp associated with it. The timestamp value of a document can be set using the timestamp parameter. For example:
+
+$ curl -XPUT localhost:9200/twitter/tweet/1?timestamp=2009-11-15T14%3A12%3A12 -d '{
+    "user" : "kimchy",
+    "message" : "trying out Elasticsearch"
+}'
+If the timestamp value is not provided externally or in the _source, the timestamp will be automatically set to the date the document was processed by the indexing chain. 
+
+
+TTL
+
+A document can be indexed with a ttl (time to live) associated with it. Expired documents will be expunged automatically. The expiration date that will be set for a document with a provided ttl is relative to the timestamp of the document, meaning it can be based on the time of indexing or on any time provided. The provided ttl must be strictly positive and can be a number (in milliseconds) or any valid time value as shown in the following examples:
+
+curl -XPUT 'http://localhost:9200/twitter/tweet/1?ttl=86400000' -d '{
+    "user": "kimchy",
+    "message": "Trying out elasticsearch, so far so good?"
+}'
+curl -XPUT 'http://localhost:9200/twitter/tweet/1?ttl=1d' -d '{
+    "user": "kimchy",
+    "message": "Trying out elasticsearch, so far so good?"
+}'
+
+
+Distributed
+
+The index operation is directed to the primary shard based on its route (see the Routing section above) and performed on the actual node containing this shard.
+
+
+Write consistency
+
+To prevent writes from taking place on the "wrong" side of a network partition, by default, index operations only succeed if a quorum (>replicas/2+1) of active shards are available. This default can be overridden on a node-by-node basis using the action.write_consistency setting. To alter this behavior per-operation, the consistency request parameter can be used.
+
+Valid write consistency values are one, quorum, and all.
+
+Refresh
+
+To refresh the shard (not the whole index) immediately after the operation occurs, so that the document appears in search results immediately, the refresh parameter can be set to true. Setting this option to true should ONLY be done after careful thought and verification that it does not lead to poor performance, both from an indexing and a search standpoint. Note, getting a document using the get API is completely realtime.
+
+Timeout
+
+$ curl -XPUT 'http://localhost:9200/twitter/tweet/1?timeout=5m' -d '{
+    "user" : "kimchy",
+    "post_date" : "2009-11-15T14:12:12",
+    "message" : "trying out Elasticsearch"
+}'
+
+== Get API
+
+get with document id
+curl -XGET 'http://localhost:9200/twitter/tweet/1'
+
+check for the existence of a document using HEAD, for example:
+curl -XHEAD -i 'http://localhost:9200/twitter/tweet/1'
+
+
+Realtime
+
+Optional Type
+
+source filtering
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1?_source=false'
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1?_source=*.id,retweeted'
+curl -XGET 'http://localhost:9200/twitter/tweet/1?_source_include=*.id&_source_exclude=entities'
+
+Fields
+
+
+
+== delete api
+
+curl -XDELETE 'http://localhost:9200/twitter/tweet/1'
+
+
+Parent
+
+The parent parameter can be set, which will basically be the same as setting the routing parameter.
+
+Note that deleting a parent document does not automatically delete its children. One way of deleting all child documents given a parent’s id is to perform a delete by query on the child index with the automatically generated (and indexed) field _parent, which is in the format parent_type#parent_id.
+
+== Update API
+
+
+curl -XPUT localhost:9200/test/type1/1 -d '{"counter" : 1, "tags" : ["red"]}'
+
+
+Scripted updates
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{ "script" : "ctx._source.counter += count", "params" : {"count" : 4 }}'
+ST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.counter += count",
+    "params" : {
+        "count" : 4
+    }
+}'
+We can add a tag to the list of tags (note, if the tag exists, it will still add it, since its a list):
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.tags += tag",
+    "params" : {
+        "tag" : "blue"
+    }
+}'
+In addition to _source, the following variables are available through the ctx map: _index, _type, _id, _version, _routing, _parent, _timestamp, _ttl.
+
+We can also add a new field to the document:
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.name_of_new_field = \"value_of_new_field\""
+}'
+Or remove a field from the document:
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.remove(\"name_of_field\")"
+}'
+And, we can even change the operation that is executed. This example deletes the doc if the tags field contain blue, otherwise it does nothing (noop):
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.tags.contains(tag) ? ctx.op = \"delete\" : ctx.op = \"none\"",
+    "params" : {
+        "tag" : "blue"
+    }
+}'
+
+'''
+Updates with a partial document
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "doc" : {
+        "name" : "new_name"
+    }
+}'
+
+
+detect_noop
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "doc" : {
+        "name" : "new_name"
+    },
+    "detect_noop": true
+}'
+
+If name was new_name before the request was sent then the entire update request is ignored.
+
+
+Upserts
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "script" : "ctx._source.counter += count",
+    "params" : {
+        "count" : 4
+    },
+    "upsert" : {
+        "counter" : 1
+    }
+}'
+
+doc_as_upsert
+
+curl -XPOST 'localhost:9200/test/type1/1/_update' -d '{
+    "doc" : {
+        "name" : "new_name"
+    },
+    "doc_as_upsert" : true
+}'
+
+
+== Multi Get API
+
+
+curl 'localhost:9200/_mget' -d '{
+    "docs" : [
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "1"
+        },
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "2"
+        }
+    ]
+}'
+The mget endpoint can also be used against an index (in which case it is not required in the body):
+
+curl 'localhost:9200/test/_mget' -d '{
+    "docs" : [
+        {
+            "_type" : "type",
+            "_id" : "1"
+        },
+        {
+            "_type" : "type",
+            "_id" : "2"
+        }
+    ]
+}'
+
+And type:
+
+curl 'localhost:9200/test/type/_mget' -d '{
+    "docs" : [
+        {
+            "_id" : "1"
+        },
+        {
+            "_id" : "2"
+        }
+    ]
+}'
+In which case, the ids element can directly be used to simplify the request:
+
+curl 'localhost:9200/test/type/_mget' -d '{
+    "ids" : ["1", "2"]
+}'
+
+
+Optional Type
+
+Source Filtering
+
+curl 'localhost:9200/_mget' -d '{
+    "docs" : [
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "1",
+            "_source" : false
+        },
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "2",
+            "_source" : ["field3", "field4"]
+        },
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "3",
+            "_source" : {
+                "include": ["user"],
+                "exclude": ["user.location"]
+            }
+        }
+    ]
+}'
+
+Fields
+
+curl 'localhost:9200/_mget' -d '{
+    "docs" : [
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "1",
+            "fields" : ["field1", "field2"]
+        },
+        {
+            "_index" : "test",
+            "_type" : "type",
+            "_id" : "2",
+            "fields" : ["field3", "field4"]
+        }
+    ]
+}'
+
+Alternatively, you can specify the fields parameter in the query string as a default to be applied to all documents.
+
+curl 'localhost:9200/test/type/_mget?fields=field1,field2' -d '{
+    "docs" : [
+        {
+            "_id" : "1" (1)
+        },
+        {
+            "_id" : "2",
+            "fields" : ["field3", "field4"] (2)
+        }
+    ]
+}'
+Returns field1 and field2
+
+Returns field3 and field4
+
+== bulk
+
+== Delete By Query API
+
+== Bulk UDP API
+
+== Term Vectors
+
+curl -XGET 'http://localhost:9200/twitter/tweet/1/_termvector?fields=tags'
+
+
+
+UPDATE IF EXISTS CREATE IF NOT EXISTS
+
+curl -XPOST localhost:9200/test/test/3/_update -d '{"script": "ctx._source.name = \"aaa\"","upsert": { "field1": "value1","field2": "value2"}}'

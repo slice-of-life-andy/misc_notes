@@ -1,0 +1,58 @@
+== Language plugins
+
+java	
+groovy	
+scala
+antlr (Adds support for generating parsers using Antlr.)
+
+== Incubating language plugins
+
+assembler(Adds native assembly language capabilities to a project.)
+c
+cpp
+objective-c
+objective-cpp
+windows-resources
+
+== Integration plugins
+
+application
+ear
+jetty
+maven(Adds support for publishing artifacts to Maven repositories.)
+osgi
+war
+
+== Incubating integration plugins
+
+distribution(Adds support for building ZIP and TAR distributions.)
+
+java-library-distribution
+ivy-publish
+maven-publish(This plugin provides a new DSL to support publishing artifacts to Maven repositories, which improves on the existing DSL)
+
+
+== Software development plugins
+announce
+eclipse
+eclipse-wtp
+idea
+checkstyle
+
+==  Incubating software development plugins
+
+build-dashboard	
+wrapper
+java-gradle-plugin	
+
+== Base plugins
+
+
+
+
+
+
+
+
+
+ 

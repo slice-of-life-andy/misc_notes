@@ -1,0 +1,147 @@
+== get image using docker pull
+
+
+sudo docker pull ubuntu:12.04
+
+sudo docker pull dl.dockerpool.com:5000/ubuntu:12.04
+
+sudo docker pull localhost:5000/ubuntu:14.04-v2
+
+sudo docker run -t -i ubuntu:12.04 /bin/bash
+
+== list local iamge
+
+
+sudo docker images
+
+其中镜像的 ID 唯一标识了镜像，TAG 信息用来标记来自同一个仓库的不同镜像。
+
+start a container using image
+
+----
+sudo docker run -t -i ubuntu:14.04 /bin/bash
+----
+
+如果不指定具体的标记，则默认使用 latest 标记信息
+
+== create image
+
+
+----
+sudo docker run -t -i training/sinatra /bin/bash
+----
+
+在容器中添加 json 和 gem 两个应用。
+
+----
+root@0b2616b0e5a8:/# gem install json
+----
+
+exit and commit 
+
+----
+sudo docker commit -m "Added json gem" -a "Docker Newbee" 0b2616b0e5a8 ouruser/sinatra:v2
+
+
+sudo docker images
+----
+
+使用新的镜像来启动容器
+----
+$ sudo docker run -t -i ouruser/sinatra:v2 /bin/bash
+----
+
+
+
+== create Image using Dockerfile
+
+touch Dockerfile
+
+[source,shell]
+----
+# This is a comment
+FROM ubuntu:14.04
+MAINTAINER Docker Newbee <newbee@docker.com>
+RUN apt-get -qq update
+RUN apt-get -qqy install ruby ruby-dev
+RUN gem install sinatra
+----
+
+Dockerfile 基本的语法是
+
+*   使用``#``来注释
+*   ``FROM`` 指令告诉 Docker 使用哪个镜像作为基础
+*   接着是维护者的信息
+*   ``RUN``开头的指令会在创建中运行，比如安装一个软件包，在这里使用 apt-get 来安装了一些软件
+
+编写完成 Dockerfile 后可以使用 ``docker build`` 来生成镜像。
+
+----
+`` sudo docker build -t="ouruser/sinatra:v2" .``
+----
+
+其中 ``-t`` 标记来添加 tag，指定新的镜像的用户信息。 “.” 是 Dockerfile 所在的路径（当前目录），也可以替换为一个具体的 Dockerfile 的路径。
+
+
+[source,shell]
+----
+# put my local web site in myApp folder to /var/www
+ADD myApp /var/www
+# expose httpd port
+EXPOSE 80
+# the command to run
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+----
+
+启动一个容器
+----
+``$ sudo docker run -t -i ouruser/sinatra:v2 /bin/bash``
+----
+
+从本地文件系统导入
+
+----
+``sudo cat ubuntu-14.04-x86_64-minimal.tar.gz  |docker import - ubuntu:14.04``
+----
+
+上传镜像
+
+----
+``sudo docker push ouruser/sinatra``
+----
+
+== 保存导入镜像
+
+本地镜像库里导出本地文件
+----
+``sudo docker save -o ubuntu_14.04.tar ubuntu:14.04``
+----
+
+导入镜像
+----
+``sudo docker load --input ubuntu_14.04.tar``
+----
+或
+----
+`` sudo docker load < ubuntu_14.04.tar``
+----
+
+== 移除本地镜像
+
+----
+``sudo docker rmi training/sinatra``
+----
+
+在删除镜像之前要先用 ``docker rm`` 删掉依赖于这个镜像的所有容器。
+
+
+清理所有未打过标签的本地镜像
+
+----
+``sudo docker rmi $(docker images -q -f "dangling=true")``
+----
+完整的命令
+----
+`` sudo docker rmi $(docker images --quiet --filter "dangling=true")``
+----
+

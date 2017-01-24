@@ -1,0 +1,1 @@
+Controls a preference of which shard replicas to execute the search request on.

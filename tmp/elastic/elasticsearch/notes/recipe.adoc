@@ -1,0 +1,6 @@
+response filter
+
+curl -XGET 'localhost:9200/_search?pretty&filter_path=took,hits.hits._id,hits.hits._score'
+
+
+index op_type

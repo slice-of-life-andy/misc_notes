@@ -1,0 +1,111 @@
+= parser package class diagram 
+
+[plantuml,"parser","png"]
+----
+package org.jsoup.parser<<Frame>> {
+
+/'
+ class defination
+'/
+
+abstract class Token 
+abstract class TreeBuilder 
+class Parser
+class TreeBuilder
+class ParseError
+class ParseErrorList
+class Tokeniser
+class TokenQueue
+class HtmlTreeBuilder 
+class XmlTreeBuilder 
+class Tag
+class CharacterReader 
+enum TokenType
+enum TokeniserState
+enum HtmlTreeBuilderState
+}
+
+class ArrayList<<ParseError>>
+
+'add class fields and methods'
+
+TreeBuilder : CharacterReader reader 
+TreeBuilder : Tokeniser tokeniser 
+TreeBuilder : Document doc 
+TreeBuilder : ArrayList<Element> stack 
+TreeBuilder : String baseUri 
+TreeBuilder : Token currentToken 
+TreeBuilder : ParseErrorList errors 
+TreeBuilder : parse(String input, String baseUri, ParseErrorList errors) 
+TreeBuilder : process(Token token) 
+
+HtmlTreeBuilder : HtmlTreeBuilderState state
+HtmlTreeBuilder : HtmlTreeBuilderState originalState
+HtmlTreeBuilder : Element headElement
+HtmlTreeBuilder : FormElement formElement
+HtmlTreeBuilder : Element contextElement 
+
+HtmlTreeBuilderState : process(Token t, HtmlTreeBuilder tb)
+
+Parser : TreeBuilder treeBuilder
+Parser : ParseErrorList errors
+Parser : parse(String html, String baseUri)
+
+Tag : String[] blockTags
+Tag : String[] inlineTags
+Tag : Map<String, Tag> tags
+Tag : register(Tag tag)
+Tag : valueOf(String tagName) 
+
+Token : TokenType type
+Token : tokenType()
+
+Tokeniser : CharacterReader reader
+Tokeniser : ParseErrorList errors
+Tokeniser : TokeniserState state
+Tokeniser : Token emitPending
+Tokeniser : read() 
+Tokeniser : emit(Token token) 
+Tokeniser : transition(TokeniserState state)
+
+TokeniserState : read(Tokeniser t, CharacterReader r) 
+
+'relationship' 
+
+TreeBuilder <|-- XmlTreeBuilder
+TreeBuilder <|-- HtmlTreeBuilder
+ 
+TreeBuilder o-- CharacterReader
+TreeBuilder o-- Tokeniser
+TreeBuilder o-- Document
+TreeBuilder o-- Token
+TreeBuilder --> ParseErrorList
+
+HtmlTreeBuilder *-- HtmlTreeBuilderState
+HtmlTreeBuilder ..> Tag 
+
+HtmlTreeBuilderState ..> HtmlTreeBuilder
+
+XmlTreeBuilder ..> Tag
+
+Parser o-- TreeBuilder
+Parser o-- ParseErrorList 
+ 
+Token +-- TokenType 
+
+Tokeniser o-- CharacterReader 
+Tokeniser o-- Token 
+Tokeniser *-- TokeniserState
+Tokeniser --> ParseErrorList 
+
+TokeniserState ..> Tokeniser
+TokeniserState ..> CharacterReader
+TokeniserState ..> TokeniserState 
+
+ArrayList <|-- ParseErrorList 
+ParseErrorList ..> ParseError 
+
+'note'
+note top of Parser : Parses HTML into a org.jsoup.nodes.Document 
+
+----

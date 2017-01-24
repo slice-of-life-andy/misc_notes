@@ -1,0 +1,22 @@
+== nodes
+
+A collection is a combination of all of the cores that together provide a logical index that is distributed across many nodes.
+
+Collections are made up of one or more shards.  Shards have one or more replicas.  Each replica is a core.
+
+In SolrCloud, a node is Java Virtual Machine instance running Solr, commonly called a server
+
+
+
+
+
+http://localhost:8983/solr/admin/cores?action=CREATE&name=gettingstarted&instanceDir=gettingstarted
+
+
+http://localhost:8983/solr/admin/cores?action=CREATE&name=core1&instanceDir=core1
+
+
+http://localhost:8983/solr/admin/collections?action=SPLITSHARD&collection=anotherCollection&shard=shard
+
+
+http://localhost:8983/solr/admin/collections?action=SPLITSHARD&collection=core1&shard=shard1

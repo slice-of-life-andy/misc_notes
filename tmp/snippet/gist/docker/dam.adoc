@@ -1,0 +1,7 @@
+192.168.5.200- docker push docker.ahamojo.com:5000/gentoo:dam
+
+192.168.5.30-  docker pull docker.ahamojo.com:5000/gentoo:dam
+ 
+192.168.5.30-  docker tag -f XX aws.ahamojo.com:5000/gentoo:dam
+
+192.168.5.30-  docker push aws.ahamojo.com:5000/gentoo:dam

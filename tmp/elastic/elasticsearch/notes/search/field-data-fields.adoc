@@ -1,0 +1,6 @@
+{
+    "query" : {
+        ...
+    },
+    "fielddata_fields" : ["test1", "test2"]
+}

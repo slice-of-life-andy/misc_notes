@@ -1,0 +1,131 @@
+== What is dependency manangment?
+ dependencies: 构建项目需要的东西
+ publications: 需要构建和运行的项目产物
+ dependency resolution:告诉gradledependencies是什么,dependencies可能在remove Maven or Ivy repository或者本地库,或者其他项目,gradle让dependencies可用的过程叫做依赖解析
+ transitive dependencies:依赖的dependencies又依赖了其它的dependencies,gradle 使这些间接依赖的dependencies变的可用
+ publication:把publications上传到某个地方
+== Declaring your dependencies
+
+build.gradle
+----
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '3.6.7.Final'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+----
+
+== Dependency configurations
+
+compile 编译source需要的依赖
+runtime 运行production class需要的依赖，默认包含compile time dependencies
+testCompile 编译test source需要的依赖,默认包含编译项目的class和compile time dependencies
+testRuntime 运行测试需要的依赖,默认包含 compile, runtime and test compile dependencies
+
+== External dependencies
+
+build.gradle
+----
+dependencies {
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '3.6.7.Final'
+}
+----
+
+the shortcut form for declaring external dependencies looks like “group:name:version”.
+
+----
+dependencies {
+    compile 'org.hibernate:hibernate-core:3.6.7.Final'
+}
+----
+== Repositories
+A repository is really just a collection of files, organized by group, name and version. Gradle understands several different repository formats, such as Maven and Ivy, and several different ways of accessing the repository, such as using the local file system or HTTP.
+
+maven central
+----
+repositories {
+    mavenCentral()
+}
+----
+remote repositories
+----
+repositories {
+    maven {
+        url "http://repo.mycompany.com/maven2"
+    }
+}
+----
+
+maven local
+----
+repositories {
+    mavenLocal()
+}
+
+----
+
+remove Ivy
+----
+repositories {
+    ivy {
+        url "http://repo.mycompany.com/repo"
+    }
+}
+----
+
+local Ivy
+----
+repositories {
+    ivy {
+        // URL can refer to a local directory
+        url "../local-repo"
+    }
+}
+----
+
+flat Dir 
+----
+repositories {
+    flatDir(dirs: '/home/andy/tmp/lib')
+}
+----
+
+== Publishing artifacts
+
+Dependency configurations are also used to publish files. We call these files publication artifacts, or usually just artifacts.
+
+public to ivy repository
+----
+uploadArchives {
+    repositories {
+        ivy {
+            credentials {
+                username "username"
+                password "pw"
+            }
+            url "http://repo.mycompany.com"
+        }
+    }
+}
+----
+
+gradle uploadArchives
+
+publish to maven
+----
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://localhost/tmp/myRepo/")
+        }
+    }
+}
+----
+== Where to next?

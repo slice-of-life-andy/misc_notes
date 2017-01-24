@@ -1,0 +1,23 @@
+andy@andy:~$ git config --global user.name "andy yu"
+andy@andy:~$ git config --global user.email "ukouryou@gmail.com"
+andy@andy:~$ git config --list
+git config --global core.editor "vim"
+
+ssh-keygen -t rsa -C "ukouryou@gmail.com"
+
+
+add public key
+
+ssh -T git@github.com
+
+
+== title 
+
+== Storing your HTTPS credentials using a Keyring
+key chain
+[source,shell]
+----
+sudo apt-get install libgnome-keyring-dev
+sudo make --directory=/usr/share/doc/git/contrib/credential/gnome-keyring
+git config --global credential.helper /usr/share/doc/git/contrib/credential/gnome-keyring/git-credential-gnome-keyring
+----

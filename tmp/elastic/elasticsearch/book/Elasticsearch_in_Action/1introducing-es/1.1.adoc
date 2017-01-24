@@ -1,0 +1,9 @@
+Term frequency—The more times the words you’re looking for appear in a document,the higher the score
+
+Inverse document frequency—The weight of each word is higher if the word is uncommon across other documents.
+
+
+HANDLING TYPOS
+UPPORTING DERIVATIVES
+USING STATISTICS
+PROVIDING SUGGESTIONS

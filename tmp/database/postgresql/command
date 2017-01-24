@@ -1,0 +1,42 @@
+login
+sudo -u postgres psql postgres
+
+alter password
+
+sudo -u postgres psql
+alter user postgres password '123456';
+ 
+list database
+\l
+
+list roles
+\du
+
+connet database
+\c DBNAME
+
+
+
+
+
+'''
+
+
+CREATE USER dam WITH PASSWORD '123456'
+
+CREATE ROLE jooqt WITH PASSWORD '123456';
+
+ALTER ROLE demo_role WITH NOLOGIN;
+
+CREATE DATABASE dam WITH OWNER dam ENCODING 'UTF8';
+
+GRANT ALL PRIVILEGES ON DATABASE "dam" to dam;
+
+ sudo -u postgres psql -d dam -a -f ~/workspace/dam/dam-repo-impl/src/main/resources/tables_postgres.sql
+
+ALTER USER dam WITH SUPERUSER;
+
+
+
+ALTER TABLE mytable ALTER COLUMN mycolumn TYPE varchar(40);
+ALTER TABLE dbo.doc_exa ADD column_b VARCHAR(20) NULL, column_c INT NULL ;

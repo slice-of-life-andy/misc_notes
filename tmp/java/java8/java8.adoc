@@ -1,0 +1,101 @@
+= java8
+
+=== Overview
+
+
+'''
+
+=== Lambda
+
+https://en.wikipedia.org/wiki/Lambda_expression[Definition]: a function (or a subroutine) defined, and possibly called, without being bound to an identifier.
+
+syntax:
+
+[source,java]
+----
+ (Type1 param1, Type2 param2, ..., TypeN paramN) -> {
+  statment1;
+  statment2;
+  //.............
+  return statmentM;
+}
+----
+
+sample:
+[source,java]
+----
+List<String> names = new ArrayList<>();
+names.add("a");
+names.add("b");
+List<String> lowercaseNames = names.stream().map((String name) -> {return name.toLowerCase();}).collect(Collectors.toList());
+----
+
+* 参数类型省略–绝大多数情况，编译器都可以从上下文环境中推断出lambda表达式的参数类型
+* 当lambda表达式的参数个数只有一个，可以省略小括号
+* 当lambda表达式只包含一条语句时，可以省略大括号、return和语句结尾的分号lambda表达式简化为:
+
+[source,java]
+----
+param1 -> statment
+----
+
+'''
+
+=== Stream
+
+https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html[Definition]: A sequence of elements supporting sequential and parallel aggregate operations.
+
+sample:
+
+[source,java]
+----
+int sum = widgets.stream()
+                      .filter(w -> w.getColor() == RED)
+                      .mapToInt(w -> w.getWeight())
+                      .sum();
+----
+ 
+创建stream的方法
+
+    通过Stream接口的静态工厂方法
+    通过Collection接口的默认方法stream()，把一个Collection对象转换成Stream
+
+of
+generator
+iterate
+
+
+==== 转换Stream
+
+* distinct 去重
+* filter 过滤
+* map 用给定的转换函数进行转换
+* flatMap 
+* peek 生成一个包含原Stream的所有元素的新Stream
+* limit 截断操作
+* skip 返回一个不包含skip掉的新Stream
+
+sample:
+ 
+[source,java]
+----
+List<Integer> nums = Lists.newArrayList(1,1,null,2,3,4,null,5,6,7,8,9,10);
+System.out.println(“sum is:”+nums.stream().filter(num -> num != null).
+   			distinct().mapToInt(num -> num * 2).
+               peek(System.out::println).skip(2).limit(4).sum());
+----
+
+==== Reduction operations
+
+ A reduction operation (also called a fold) takes a sequence of input elements and combines them into a single summary result by repeated application of a combining operation, such as finding the sum or maximum of a set of numbers, or accumulating elements into a list. The streams classes have multiple forms of general reduction operations, called reduce() and collect(), as well as multiple specialized reduction forms such as sum(), max(), or count().
+
+* collect
+* reduce
+
+'''
+
+=== Reference List 
+
+http://ifeve.com/lambda/
+
+http://ifeve.com/stream/

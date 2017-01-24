@@ -1,0 +1,332 @@
+== Introduction
+
+Transitive dependency management
+Support for non-managed dependencies
+
+Support for custom dependency definitions.
+A fully customizable approach to Dependency Resolution
+
+Full Compatibility with Maven and Ivy
+Integration with existing dependency management infrastructure
+
+=== Flexible dependency management for migrations
+
+
+=== Dependency management and Java
+
+== Dependency Management Best Practices
+
+=== put the version in the Filename
+
+=== Manage transitive dependencies
+=== Resolve version conflicts
+
+=== Use Dynamic Versions and Changing Modules
+
+== Dependency configurations
+
+In Gradle dependencies are grouped into configurations. Configurations have a name, a number of other properties, and they can extend each other.
+
+Definition of a configuration
+----
+configurations {
+    compile
+}
+----
+
+Accessing a configuration
+----
+println configurations.compile.name
+println configurations['compile'].name
+----
+
+Configuration of a configuration
+
+----
+configurations {
+    compile {
+        description = 'compile classpath'
+        transitive = true
+    }
+    runtime {
+        extendsFrom compile
+    }
+}
+configurations.compile {
+    description = 'compile classpath'
+}
+----
+
+== How to declare your dependencies
+
+Dependency types
+
+External module dependency	A dependency on an external module in some repository.
+Project dependency	A dependency on another project in the same build.
+File dependency	A dependency on a set of files on the local filesystem.
+Client module dependency	A dependency on an external module, where the artifacts are located in some repository but the module meta-data is specified by the local build. You use this kind of dependency when you want to override the meta-data for the module.
+Gradle API dependency	A dependency on the API of the current Gradle version. You use this kind of dependency when you are developing custom Gradle plugins and task types.
+Local Groovy dependency	A dependency on the Groovy version used by the current Gradle version. You use this kind of dependency when you are developing custom Gradle plugins and task types.
+
+
+=== External module dependencies
+
+Module dependencies
+----
+dependencies {
+    runtime group: 'org.springframework', name: 'spring-core', version: '2.5'
+    runtime 'org.springframework:spring-core:2.5',
+            'org.springframework:spring-aop:2.5'
+    runtime(
+        [group: 'org.springframework', name: 'spring-core', version: '2.5'],
+        [group: 'org.springframework', name: 'spring-aop', version: '2.5']
+    )
+    runtime('org.hibernate:hibernate:3.0.5') {
+        transitive = true
+    }
+    runtime group: 'org.hibernate', name: 'hibernate', version: '3.0.5', transitive: true
+    runtime(group: 'org.hibernate', name: 'hibernate', version: '3.0.5') {
+        transitive = true
+    }
+}
+----
+
+
+Depending on modules with multiple artifacts
+
+
+artifact only notation
+----
+dependencies {
+    runtime "org.groovy:groovy:2.2.0@jar"
+    runtime group: 'org.groovy', name: 'groovy', version: '2.2.0', ext: 'jar'
+}
+
+----
+
+Classifiers
+----
+
+----
+
+=== Client module dependencies
+
+----
+dependencies {
+    runtime module("org.codehaus.groovy:groovy:2.4.4") {
+        dependency("commons-cli:commons-cli:1.0") {
+            transitive = false
+        }
+        module(group: 'org.apache.ant', name: 'ant', version: '1.9.4') {
+            dependencies "org.apache.ant:ant-launcher:1.9.4@jar",
+                         "org.apache.ant:ant-junit:1.9.4"
+        }
+    }
+}
+----
+
+=== Project dependencies
+
+----
+dependencies {
+    compile project(':shared')
+}
+----
+
+=== File dependencies
+
+----
+dependencies {
+    runtime files('libs/a.jar', 'libs/b.jar')
+    runtime fileTree(dir: 'libs', include: '*.jar')
+}
+----
+
+----
+dependencies {
+    compile files("$buildDir/classes") {
+        builtBy 'compile'
+    }
+}
+
+task compile << {
+    println 'compiling classes'
+}
+
+task list(dependsOn: configurations.compile) << {
+    println "classpath = ${configurations.compile.collect {File file -> file.name}}"
+}
+----
+
+=== Gradle API Dependency
+
+----
+dependencies {
+    compile gradleApi()
+}
+----
+Local Groovy Dependency
+----
+dependencies {
+    compile localGroovy()
+}
+
+----
+
+=== Excluding transitive dependencies
+
+----
+configurations {
+    compile.exclude module: 'commons'
+    all*.exclude group: 'org.gradle.test.excludes', module: 'reports'
+}
+
+dependencies {
+    compile("org.gradle.test.excludes:api:1.0") {
+        exclude module: 'shared'
+    }
+}
+----
+
+
+=== Optional attributes
+----
+dependencies {
+    runtime ":junit:4.12", ":testng"
+    runtime name: 'testng'
+}
+---- 
+
+Collections and arrays of dependencies
+
+
+----
+List groovy = ["org.codehaus.groovy:groovy-all:2.4.4@jar",
+               "commons-cli:commons-cli:1.0@jar",
+               "org.apache.ant:ant:1.9.4@jar"]
+List hibernate = ['org.hibernate:hibernate:3.0.5@jar',
+                  'somegroup:someorg:1.0@jar']
+dependencies {
+    runtime groovy, hibernate
+}
+
+----
+
+
+=== Dependency configurations
+----
+dependencies {
+    runtime group: 'org.somegroup', name: 'somedependency', version: '1.0', configuration: 'someConfiguration'
+}
+----
+
+----
+dependencies {
+    compile project(path: ':api', configuration: 'spi')
+}
+----
+
+
+=== Working with dependencies
+
+== Repositories
+
+Repository types
+
+Maven central repository	A pre-configured repository that looks for dependencies in Maven Central.
+Maven JCenter repository	A pre-configured repository that looks for dependencies in Bintray's JCenter.
+Maven local repository	A pre-configured repository that looks for dependencies in the local Maven repository.
+Maven repository	A Maven repository. Can be located on the local filesystem or at some remote location.
+Ivy repository	An Ivy repository. Can be located on the local filesystem or at some remote location.
+Flat directory repository
+
+
+=== maven central
+
+----
+repositories {
+    mavenCentral()
+    jcenter()
+    mavenLocal()    
+}
+
+repositories {
+    jcenter {
+        url "http://jcenter.bintray.com/"
+    }
+}
+
+----
+
+
+=== Maven repositories
+
+----
+repositories {
+    maven {
+        url "http://repo.mycompany.com/maven2"
+    }
+}
+----
+
+
+----
+repositories {
+    maven {
+        // Look for POMs and artifacts, such as JARs, here
+        url "http://repo2.mycompany.com/maven2"
+        // Look for artifacts here if not found at the above location
+        artifactUrls "http://repo.mycompany.com/jars"
+        artifactUrls "http://repo.mycompany.com/jars2"
+    }
+}
+----
+
+Accessing password protected Maven repositories
+
+----
+repositories {
+    maven {
+        credentials {
+            username 'user'
+            password 'password'
+        }
+        url "http://repo.mycompany.com/maven2"
+    }
+}
+----
+
+flat directory repository
+
+----
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
+    flatDir {
+        dirs 'lib1', 'lib2'
+    }
+}
+----
+
+
+=== Working with repositories
+----
+repositories {
+    flatDir {
+        name 'localRepository'
+    }
+}
+repositories {
+    localRepository {
+        dirs 'lib'
+    }
+}
+repositories.localRepository {
+    dirs 'lib'
+}
+----
+
+== How dependency resolution works
+
+

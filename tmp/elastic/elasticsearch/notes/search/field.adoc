@@ -1,0 +1,21 @@
+load stored field
+{
+    "fields" : ["user", "postDate"],
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+only load _id and _type 
+
+
+{
+    "fields" : ["user", "postDate"],
+    "query" : {
+        "term" : { "user" : "kimchy" }
+    }
+}
+
+
+

@@ -1,0 +1,9 @@
+----
+url : resource access url
+title : resource title
+content : resource content
+owner : resource owner
+repo : repo Name
+last_modifiedtime : last modified time
+resource_type : 
+----

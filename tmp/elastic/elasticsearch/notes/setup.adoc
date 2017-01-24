@@ -1,0 +1,10 @@
+./bin/elasticsearch -d -Des.path.conf=/home/andy/tmp/elasticsearch/config
+
+
+--node.name=dev1
+--cluster.name=ahamojo
+
+
+
+-Des.index.store.type=memory 
+-Des.network.host=10.0.0.4

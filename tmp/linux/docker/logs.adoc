@@ -1,0 +1,10 @@
+= logs
+
+== example
+
+docker logs -f container
+
+example
+----
+docker logs -f dashboard
+----

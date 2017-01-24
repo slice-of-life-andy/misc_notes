@@ -1,0 +1,15 @@
+The elasticsearch REST APIs are exposed using JSON over HTTP.
+
+== Multiple Indices
+
+ support wildcards, for example: test*
+
+ ignore_unavailable
+
+allow_no_indices
+
+ expand_wildcards
+
+
+If none is specified then wildcard expansion will be disabled and if all is specified, wildcard expressions will expand to all indices (this is equivalent to specifying open,closed).
+

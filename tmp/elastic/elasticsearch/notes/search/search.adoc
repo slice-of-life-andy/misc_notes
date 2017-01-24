@@ -1,0 +1,11 @@
+The query can either be provided using a simple query string as a parameter, or
+ using a request body.
+curl -XGET 'http://localhost:9200/twitter/_search?q=user:kimchy'
+curl -XGET 'http://localhost:9200/twitter/tweet,user/_search?q=user:kimchy'
+curl -XGET 'http://localhost:9200/kimchy,elasticsearch/tweet/_search?q=tag:wow'
+curl -XGET 'http://localhost:9200/_all/tweet/_search?q=tag:wow'
+curl -XGET 'http://localhost:9200/_search?q=tag:wow'
+
+
+
+

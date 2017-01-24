@@ -1,0 +1,136 @@
+search
+
+The search API allows to execute a search query and get back search hits that match the query. The query can either be provided using a simple query string as a parameter, or using a request body.
+
+Multi-Index, Multi-Type
+
+For example, we can search on all documents across all types within the twitter index:
+
+curl -XGET 'http://localhost:9200/twitter/_search?q=user:kimchy'
+
+
+also search within specific types:
+
+curl -XGET 'http://localhost:9200/twitter/tweet,user/_search?q=user:kimchy
+
+
+We can also search all tweets with a certain tag across several indices (for example, when each user has his own index):
+
+curl -XGET 'http://localhost:9200/kimchy,elasticsearch/tweet/_search?q=tag:wow'
+
+
+
+Or we can search all tweets across all available indices using _all placeholder:
+
+curl -XGET 'http://localhost:9200/_all/tweet/_search?q=tag:wow'
+
+Or even search across all indices and all types:
+
+curl -XGET 'http://localhost:9200/_search?q=tag:wow'
+
+
+== URI Search
+
+The parameters allowed in the URI are:
+
+q,df,analyzer,lowercase_expanded_terms,analyze_wildcard,default_operator,lenient,explain,_source,fields,sort,track_scores,timeout,from,size,search_type
+
+
+curl -XPOST 'localhost:9200/test/_search?pretty&fields=tags,counter'
+
+
+== Request Body Search
+
+parameters
+search_type,query_cache
+
+== Sort 
+
+Sort Order
+asc,desc  
+default is desc
+sort with score  using _score
+
+Sort mode option
+min,max,sum,avg
+
+
+curl -XPOST 'localhost:9200/_search' -d '{
+   "query" : {
+    ...
+   },
+   "sort" : [
+      {"price" : {"order" : "asc", "mode" : "avg"}}
+   ]
+}'
+
+Sorting within nested objects.
+
+
+
+nested_path,nested_filter
+
+
+Missing Values
+
+_last, _first
+
+
+Source filtering
+
+fielddata_field
+
+search type
+query_then_fetch,dfs_query_then_fetch,count,scan,query_and_fetch,dfs_query_and_fetch
+
+Rescoring
+
+
+
+
+
+== HOW to query inner object type
+----
+curl -XGET 'localhost:9200/user/_search?q=detail.headline:java&pretty=true'
+----
+
+----
+{
+  "user" : {
+    "mappings" : {
+      "profile" : {
+        "properties" : {
+          "detail" : {
+            "properties" : {
+              "address" : {
+                "type" : "string"
+              },
+              "company" : {
+                "type" : "string"
+              },
+              "headline" : {
+                "type" : "string"
+              }
+            }
+          },
+          "mail" : {
+            "type" : "string"
+          },
+          "skill" : {
+            "type" : "string"
+          },
+          "telephonenumber" : {
+            "type" : "string"
+          },
+          "upsert_value" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
+----

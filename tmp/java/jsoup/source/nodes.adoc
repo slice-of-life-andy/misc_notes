@@ -1,0 +1,58 @@
+= nodes package class diagram 
+
+[plantuml,"nodes","png"]
+----
+package org.jsoup.nodes <<Frame>> {
+
+/'
+ class defination
+'/
+
+abstract class Node
+class TextNode
+class DataNode
+class DocumentType
+class XmlDeclaration
+class Comment
+class Element
+class Document
+class FormElement
+
+class Attribute
+class Attributes
+class BooleanAttribute
+
+class Entities
+}
+
+
+'add class fields and methods'
+
+Node : Node parentNode
+Node : List<Node> childNodes
+Node : Attributes attributes
+Node : String baseUri
+Node : int siblingIndex
+
+
+'relationship'
+
+Node <|--- TextNode
+Node <|--- DataNode
+Node <|--- DocumentType
+Node <|--- XmlDeclaration
+Node <|--- Comment 
+Node <|--- Element
+Element <|--- Document
+Element <|--- FormElement
+
+Node o-- Attributes
+Attributes o-- Attribute
+Attribute <|--- BooleanAttribute
+
+
+
+'note'
+'note top of Element : A HTML element consists of a tag name, attributes, and child nodes
+
+----

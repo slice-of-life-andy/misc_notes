@@ -1,0 +1,23 @@
+== Usage
+
+----
+apply plugin: 'project-report'
+----
+
+== Tasks
+
+dependencyReport
+htmlDependencyReport
+propertyReport	
+taskReport
+projectReport
+
+== Convention properties
+
+reportsDirName
+reportsDir
+projects
+projectReportDirName
+projectReportDir
+
+

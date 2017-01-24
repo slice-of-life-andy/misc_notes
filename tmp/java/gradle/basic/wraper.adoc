@@ -1,0 +1,48 @@
+==  Executing a build with the Wrapper
+
+wrapper files
+
+. gradlew (Unix Shell script)
+. gradlew.bat (Windows batch file)
+. gradle/wrapper/gradle-wrapper.jar (Wrapper JAR)
+. gradle/wrapper/gradle-wrapper.properties (Wrapper properties)
+
+./gradlew <task> (unix)
+gradlew <task> (windows)
+
+
+Gradle distributions location: $USER_HOME/.gradle/wrapper/dists
+
+== Adding the Wrapper to a project
+
+ specify a Gradle version use --gradle-version
+
+ set the URL to download Gradle from directly via --gradle-distribution-url.
+
+ running the wrapper task
+
+
+----
+gradle wrapper --gradle-version 2.0
+
+----
+
+customize wrapper task in build.gradle
+----
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+----
+
+ switch to a new version of Gradle , change the respective entry in the gradle-wrapper.properties file
+
+== Configuration
+
+ gradle-wrapper.properties
+
+== Verification of downloaded Gradle distributions
+
+
+== Unix file permissions
+
+The Wrapper task adds appropriate file permissions to allow the execution of the gradlew *NIX command. Subversion preserves this file permission. We are not sure how other version control systems deal with this. What should always work is to execute “sh gradlew”.

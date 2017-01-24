@@ -1,0 +1,27 @@
+get ContentType with File name
+
+[source,java]
+----
+		String url = "a/andy/S03E08video.mp4";
+		Path path = Paths.get(url);
+		try {
+			String ext = Files.probeContentType(path);
+			System.out.println(ext);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+----
+
+
+get ContentType with URL
+
+[source,java]
+----
+	String mimeType= URLConnection.guessContentTypeFromName("http://www.baidu.com/images/image.jpg");
+        if(StringUtils.isEmpty(mimeType)){
+            logger.info("mimetype is not detectable, will take default");
+            mimeType = "application/octet-stream";
+        }
+
+----

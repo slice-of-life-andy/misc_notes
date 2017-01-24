@@ -1,0 +1,20 @@
+version
+can not retrieve old version document
+
+op_type
+create/put-if-absent
+
+
+routing
+
+parents&children
+curl -XPUT localhost:9200/blogs/blog_tag/1122?parent=1111 -d '{ "tag" : "something"}'
+
+
+ttl
+time to live (in milliseconds)
+
+timeout
+
+
+
