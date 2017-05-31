@@ -81,3 +81,8 @@ www.snp.com
 P.S. Another helpful reference in my travels is Randy Cullom's blog post "Installing ImageMagick with JPEG, TIFF and PNG Support" at
 
 http://www.randycullom.com/chatterbox/archives/2006/12/installing_imag.html
+
+
+=== command 
+
+convert estrm1076651.jpg -resize 400x400 result_cc.jpg
