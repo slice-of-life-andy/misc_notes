@@ -7,6 +7,7 @@ kafka
 mysql
 
 
+algorithms
 
 lucene/solr/es
 es ecosystem
